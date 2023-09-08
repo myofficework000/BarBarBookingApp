@@ -75,14 +75,11 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-
     // Retrofit
     implementation("com.squareup.retrofit2:retrofit:2.9.0")
     implementation("com.squareup.retrofit2:converter-gson:2.9.0")
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
-
-
 
     //Dagger-hilt
     implementation("com.google.dagger:hilt-android:2.45")
@@ -90,4 +87,10 @@ dependencies {
 
     // ktx activity with view model injection
     implementation("androidx.activity:activity-ktx:1.7.2")
+
+    //constraint layout
+    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
+
+    //lottie animation
+    implementation("com.airbnb.android:lottie-compose:6.0.1")
 }
