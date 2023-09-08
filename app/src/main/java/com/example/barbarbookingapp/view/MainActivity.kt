@@ -1,4 +1,4 @@
-package com.example.barbarbookingapp
+package com.example.barbarbookingapp.view
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -10,7 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import com.example.barbarbookingapp.ui.theme.BarbarBookingAPPTheme
+import com.example.barbarbookingapp.view.theme.BarbarBookingAPPTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint

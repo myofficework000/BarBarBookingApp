@@ -1,4 +1,4 @@
-package com.example.barbarbookingapp.ui.theme
+package com.example.barbarbookingapp.view.theme
 
 import android.app.Activity
 import android.os.Build

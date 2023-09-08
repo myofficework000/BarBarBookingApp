@@ -1,4 +1,4 @@
-package com.example.barbarbookingapp.ui.theme
+package com.example.barbarbookingapp.view.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
