@@ -12,4 +12,12 @@
     <string name="last_name">Last Name</string>
     <string name="confirm_password">Confirm Password</string>
     <string name="sign_up">SIGN UP</string>
+    <string name="appointment_id">Appointment Number: 122</string>
+    <string name="status">CANCELED</string>
+    <string name="date_time"><![CDATA[Date & Time]]></string>
+    <string name="date">2023-09-09</string>
+    <string name="time">12:15 to 13:45 (75.0 Minutes)</string>
+    <string name="barber">Barber</string>
+    <string name="barber_name">Krishna Raut</string>
+    <string name="total_Cost">Total Cost: $ 140.0</string>
 </resources>
