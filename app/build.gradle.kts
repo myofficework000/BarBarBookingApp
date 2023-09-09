@@ -78,6 +78,7 @@ dependencies {
     // Dagger-hilt
     implementation("com.google.dagger:hilt-android:2.45")
     kapt("com.google.dagger:hilt-android-compiler:2.45")
+    implementation("androidx.hilt:hilt-navigation-compose:1.0.0")
 
     // ktx activity with view model injection
     implementation("androidx.activity:activity-ktx:1.7.2")
@@ -94,4 +95,11 @@ dependencies {
     //Room Dependency
     implementation("androidx.room:room-runtime:2.5.2")
     ksp("androidx.room:room-compiler:2.5.2")
+    implementation ("androidx.room:room-ktx:2.5.2")
+
+    //for viewModel scope
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.6.2")
+
+    //livedata
+    implementation("androidx.compose.runtime:runtime-livedata:1.5.0")
 }
