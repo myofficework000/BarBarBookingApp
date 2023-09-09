@@ -4,6 +4,10 @@ package com.example.barbarbookingapp.model.dto
 enum class PaymentMethod{
     BANK, CASH
 }
+
+enum class Status {
+    SCHEDULED, CANCELED, COMPLETED
+}
 data class Appointment(
     val appointmentId: Int,
     val userId: Int,
@@ -12,6 +16,6 @@ data class Appointment(
     val appointmentDate: String,
     val appointmentTime: String,
     val serviceCharge: Double,
-    val status: String,
+    val status: Status,
     val paymentMode: PaymentMethod
 )
