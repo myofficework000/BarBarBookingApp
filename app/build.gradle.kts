@@ -82,7 +82,7 @@ dependencies {
     implementation("com.squareup.picasso:picasso:2.71828")
     implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
 
-    //Dagger-hilt
+    // Dagger-hilt
     implementation("com.google.dagger:hilt-android:2.45")
     kapt("com.google.dagger:hilt-android-compiler:2.45")
 
@@ -94,4 +94,7 @@ dependencies {
 
     //lottie animation
     implementation("com.airbnb.android:lottie-compose:6.0.1")
+
+    // navigation component
+    implementation("androidx.navigation:navigation-compose:2.5.0")
 }
