@@ -75,13 +75,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling")
     debugImplementation("androidx.compose.ui:ui-test-manifest")
 
-    implementation("androidx.constraintlayout:constraintlayout-compose:1.0.1")
-    // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:2.9.0")
-    implementation("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation("com.squareup.picasso:picasso:2.71828")
-    implementation("com.squareup.okhttp3:logging-interceptor:5.0.0-alpha.2")
-
     // Dagger-hilt
     implementation("com.google.dagger:hilt-android:2.45")
     kapt("com.google.dagger:hilt-android-compiler:2.45")
@@ -97,4 +90,8 @@ dependencies {
 
     // navigation component
     implementation("androidx.navigation:navigation-compose:2.5.0")
+
+    //Room Dependency
+    implementation("androidx.room:room-runtime:2.5.2")
+    ksp("androidx.room:room-compiler:2.5.2")
 }
