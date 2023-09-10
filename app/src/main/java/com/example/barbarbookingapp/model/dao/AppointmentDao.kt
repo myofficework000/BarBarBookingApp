@@ -9,6 +9,7 @@ import com.example.barbarbookingapp.model.dto.Appointment
 import com.example.barbarbookingapp.model.dto.AppointmentServiceCrossRef
 import com.example.barbarbookingapp.model.dto.AppointmentWithServices
 import com.example.barbarbookingapp.model.dto.Service
+import com.example.barbarbookingapp.model.dto.Status
 
 @Dao
 interface AppointmentDao {
@@ -28,4 +29,7 @@ interface AppointmentDao {
     @Transaction
     @Query("SELECT * FROM appointments WHERE userId = :userId")
     suspend fun getAppointmentsForUser(userId: Int): List<Appointment>
+
+    @Query("UPDATE appointments SET status = :status WHERE appointmentId = :appointmentId")
+    suspend fun updateAppointmentStatus(appointmentId: Int, status: Status)
 }
