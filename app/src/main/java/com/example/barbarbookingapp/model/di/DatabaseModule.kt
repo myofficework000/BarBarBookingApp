@@ -2,6 +2,7 @@ package com.example.barbarbookingapp.model.di
 
 import android.content.Context
 import com.example.barbarbookingapp.model.AppDatabase
+import com.example.barbarbookingapp.model.dao.BarberDao
 import com.example.barbarbookingapp.model.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -23,5 +24,11 @@ class DatabaseModule {
     @Singleton
     fun getUserDao(appDatabase: AppDatabase): UserDao {
         return appDatabase.getUserDao()
+    }
+
+    @Provides
+    @Singleton
+    fun getBarberDao(appDatabase: AppDatabase): BarberDao {
+        return appDatabase.getBarberDao()
     }
 }
