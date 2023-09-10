@@ -10,6 +10,7 @@ import com.example.barbarbookingapp.model.dto.AppointmentServiceCrossRef
 import com.example.barbarbookingapp.model.dto.AppointmentWithServices
 import com.example.barbarbookingapp.model.dto.Service
 import com.example.barbarbookingapp.model.dto.Status
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface AppointmentDao {
@@ -17,18 +18,15 @@ interface AppointmentDao {
     suspend fun insertAppointment(appointment: Appointment): Long
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertService(service: Service): Long
-
-    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertAppointmentServiceCrossRef(crossRef: AppointmentServiceCrossRef)
 
     @Transaction
     @Query("SELECT * FROM appointments WHERE appointmentId = :appointmentId")
-    suspend fun getAppointmentWithServices(appointmentId: Int): AppointmentWithServices
+    fun getAppointmentWithServices(appointmentId: Int): Flow<AppointmentWithServices>
 
     @Transaction
     @Query("SELECT * FROM appointments WHERE userId = :userId")
-    suspend fun getAppointmentsForUser(userId: Int): List<Appointment>
+    fun getAppointmentsForUser(userId: Int): Flow<List<Appointment>>
 
     @Query("UPDATE appointments SET status = :status WHERE appointmentId = :appointmentId")
     suspend fun updateAppointmentStatus(appointmentId: Int, status: Status)

@@ -5,18 +5,19 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.example.barbarbookingapp.model.dto.Service
+import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface ServiceDao {
     @Query("SELECT * FROM services")
-    suspend fun getAllServices():List<Service>
+    fun getAllServices(): Flow<List<Service>>
 
     @Query("SELECT * FROM services WHERE  serviceId = :serviceId")
-    suspend fun getService(serviceId:Int): Service
+    fun getServiceById(serviceId:Int): Flow<Service>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertService(service: List<Service>)
 
     @Query("SELECT price FROM services WHERE serviceId IN (:serviceIds)")
-    suspend fun getServicePrices(serviceIds: List<Int>): List<Double>
+    fun getServicePrices(serviceIds: List<Int>): Flow<List<Double>>
 }

@@ -12,6 +12,7 @@ import com.example.barbarbookingapp.model.dto.Status
 import com.example.barbarbookingapp.model.dto.User
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 fun dataCallback(context: Context) = object : RoomDatabase.Callback() {
@@ -49,8 +50,8 @@ fun dataCallback(context: Context) = object : RoomDatabase.Callback() {
                     Barber(firstName = "Derek", lastName = "TrendSetter", experience = "Derek, a barber with 8 years of experience, is always ahead of the curve when it comes to new trends and styles.", rating = 5)
                 )
             )
-            val servicePrices1 = serviceDao.getServicePrices(listOf(1,2))
-            val servicePrices2 = serviceDao.getServicePrices(listOf(3,4))
+            val servicePrices1 = serviceDao.getServicePrices(listOf(1,2)).first()
+            val servicePrices2 = serviceDao.getServicePrices(listOf(3,4)).first()
             val totalServiceCharge1 = servicePrices1.sum()
             val totalServiceCharge2 = servicePrices2.sum()
             val appointment1 = Appointment(userId = 1, barberId = 1, appointmentDate = "2023-08-30", appointmentTime = "10:00", serviceCharge = totalServiceCharge1, status = Status.COMPLETED, paymentMethod = PaymentMethod.CASH)

@@ -2,7 +2,9 @@ package com.example.barbarbookingapp.model.di
 
 import android.content.Context
 import com.example.barbarbookingapp.model.AppDatabase
+import com.example.barbarbookingapp.model.dao.AppointmentDao
 import com.example.barbarbookingapp.model.dao.BarberDao
+import com.example.barbarbookingapp.model.dao.ServiceDao
 import com.example.barbarbookingapp.model.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -30,5 +32,17 @@ class DatabaseModule {
     @Singleton
     fun getBarberDao(appDatabase: AppDatabase): BarberDao {
         return appDatabase.getBarberDao()
+    }
+
+    @Provides
+    @Singleton
+    fun getServiceDao(appDatabase: AppDatabase): ServiceDao {
+        return appDatabase.getServiceDao()
+    }
+
+    @Provides
+    @Singleton
+    fun getAppointmentDao(appDatabase: AppDatabase): AppointmentDao {
+        return appDatabase.getAppointmentDao()
     }
 }
