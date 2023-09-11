@@ -1,4 +1,4 @@
-package com.example.barbarbookingapp
+package com.example.barbarbookingapp.view.service_screens
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -34,6 +34,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import com.example.barbarbookingapp.R
+import com.example.barbarbookingapp.ServiceItem
 
 @Composable
 @Preview
