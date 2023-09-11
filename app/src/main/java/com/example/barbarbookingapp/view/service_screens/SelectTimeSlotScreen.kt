@@ -40,6 +40,7 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.example.barbarbookingapp.viewmodel.AppointmentViewModel
+import com.example.barbarbookingapp.viewmodel.BarberViewModel
 import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
@@ -47,7 +48,7 @@ import java.util.Locale
 
 @Composable
 //@Preview(showBackground = true)
-fun SelectTimeSlotScreen(viewModel: AppointmentViewModel) {
+fun SelectTimeSlotScreen(viewModel: BarberViewModel) {
     viewModel.setStartTime(Pair(9, 0))
     Column(
         modifier = Modifier.fillMaxSize(),
@@ -112,7 +113,7 @@ fun TopDateSelectBar() {
 }
 
 @Composable
-fun TimeSlotGrid(viewModel: AppointmentViewModel) {
+fun TimeSlotGrid(viewModel: BarberViewModel) {
     var startTime by remember { mutableStateOf(Pair(0, 0)) }
     var appointments = viewModel.appointmentWithServices.value
     val services = viewModel.selectedServices.observeAsState()

@@ -11,12 +11,13 @@ import com.example.barbarbookingapp.view.intro_screens.SplashScreen
 import com.example.barbarbookingapp.view.service_screens.SelectServiceScreen
 import com.example.barbarbookingapp.view.service_screens.SelectTimeSlotScreen
 import com.example.barbarbookingapp.viewmodel.AppointmentViewModel
+import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
 fun MyApp() {
 
     val navController = rememberNavController()
-    val viewModel: AppointmentViewModel = hiltViewModel()
+    val viewModel: BarberViewModel = hiltViewModel()
     NavHost(
         navController = navController,
         startDestination = Screen.SelectService.route

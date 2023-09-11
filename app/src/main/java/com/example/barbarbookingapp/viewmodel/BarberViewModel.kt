@@ -12,6 +12,7 @@ import com.example.barbarbookingapp.model.dto.Barber
 import com.example.barbarbookingapp.model.dto.Service
 import com.example.barbarbookingapp.model.dto.User
 import com.example.barbarbookingapp.model.repository.IRepository
+import com.example.barbarbookingapp.model.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -41,6 +42,42 @@ class BarberViewModel @Inject constructor(
     private val _selectedServiceId = MutableLiveData<Int>()
     val selectedService: LiveData<Service> = _selectedServiceId.switchMap { id ->
         repository.getServiceById(id).asLiveData()
+    }
+
+    //appointment start time
+    private var _selectedStartTime = MutableLiveData<Pair<Int, Int>>()
+    var selectedStartTime = _selectedStartTime
+
+    //history appointments, not ready to be used yet
+    private var _allAppointments = repository.getAppointmentsForUser(1)
+    private val allApptIdsSet = _allAppointments.asLiveData().value?.map { it.appointmentId }
+    private var _appointmentWithServices = MutableLiveData<List<AppointmentWithServices>>()
+    var appointmentWithServices:LiveData<List<AppointmentWithServices>> = _appointmentWithServices
+
+    //services list
+    private var _allServices = repository.getAllServices()
+    var allServices = _allServices.asLiveData()
+
+    //appointment selected services
+    private val _selectedServices = MutableLiveData<List<Service>>()
+    var selectedServices:LiveData<List<Service>> = _selectedServices
+    fun setSelectedServices(list:List<Service>){
+        _selectedServices.postValue(list)
+    }
+
+    fun setStartTime(startTime: Pair<Int, Int>) {
+        _selectedStartTime.postValue(startTime)
+    }
+
+    fun fetchAppointmentWithServicesByAppointmentId() {
+        allApptIdsSet?.run {
+            val appointmentWithServices = mutableListOf<AppointmentWithServices>()
+            for (i in this@run) {
+                val item = repository.getAppointmentWithServices(i).asLiveData().value!!
+                appointmentWithServices.add(item)
+            }
+            _appointmentWithServices.postValue(appointmentWithServices)
+        }
     }
 
     private val _selectedAppointmentId = MutableLiveData<Int>()

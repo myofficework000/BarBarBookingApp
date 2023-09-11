@@ -39,10 +39,10 @@ import com.example.barbarbookingapp.R
 import com.example.barbarbookingapp.ServiceItem
 import com.example.barbarbookingapp.model.dto.Service
 import com.example.barbarbookingapp.view.navigation.NavRoutes
-import com.example.barbarbookingapp.viewmodel.AppointmentViewModel
+import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
-fun SelectServiceScreen(viewModel: AppointmentViewModel, navController: NavController) {
+fun SelectServiceScreen(viewModel: BarberViewModel, navController: NavController) {
 
     val serviceTitle by remember { mutableStateOf("Haircuts") }
     val allServices = viewModel.allServices.observeAsState()
