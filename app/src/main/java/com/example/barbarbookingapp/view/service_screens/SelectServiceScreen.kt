@@ -3,8 +3,7 @@ package com.example.barbarbookingapp.view.service_screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -25,63 +24,92 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
+import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
 import com.example.barbarbookingapp.ServiceItem
+import com.example.barbarbookingapp.model.dto.Service
+import com.example.barbarbookingapp.view.navigation.NavRoutes
+import com.example.barbarbookingapp.viewmodel.AppointmentViewModel
 
 @Composable
-@Preview
-fun SelectServiceScreen(){
+fun SelectServiceScreen(viewModel: AppointmentViewModel, navController: NavController) {
 
-    val serviceTitle by remember{ mutableStateOf("Haircuts") }
+    val serviceTitle by remember { mutableStateOf("Haircuts") }
+    val allServices = viewModel.allServices.observeAsState()
+    val selectedServices = mutableListOf<Service>()
 
-    Column(
+    ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
-        Text(text = serviceTitle, fontSize = 30.sp)
-        Spacer(modifier = Modifier.padding(5.dp))
+        val (title, choices, buttonGroup) = createRefs()
+
+        Text(text = serviceTitle, fontSize = 30.sp, modifier = Modifier.constrainAs(title) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        })
+
         LazyColumn(
-            modifier = Modifier.fillMaxWidth()
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(choices) {
+                    top.linkTo(title.bottom, 10.dp)
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(buttonGroup.top, 10.dp)
+                    height = Dimension.fillToConstraints
+                    width = Dimension.fillToConstraints
+                }
         ) {
-            items(getServiceItems()){
-                ServiceItemCard(serviceItem = it)
+            items(allServices.value ?: emptyList()) {
+                ServiceItemCard(serviceItem = it, selectedServices)
                 Spacer(modifier = Modifier.padding(10.dp))
             }
         }
-        Spacer(modifier = Modifier.padding(5.dp))
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.Center
-        ) {
-            Button(
-                onClick = {  },
-                colors = ButtonDefaults.buttonColors(Color.Red)
-            ) {
-                Text(text = "Change Barber")
-            }
-            Spacer(modifier = Modifier.padding(10.dp))
-            Button(
-                onClick = {  },
-                colors = ButtonDefaults.buttonColors(Color.Blue)
-            ) {
-                Text(text = "next")
+
+        Box(modifier = Modifier.constrainAs(buttonGroup) {
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            bottom.linkTo(parent.bottom)
+        }) {
+            Row {
+                Button(
+                    onClick = {
+
+                    },
+                    colors = ButtonDefaults.buttonColors(Color.Red),
+
+                    ) {
+                    Text(text = "Change Barber")
+                }
+                Spacer(modifier = Modifier.padding(10.dp))
+                Button(
+                    onClick = {
+                        viewModel.setSelectedServices(selectedServices)
+                        navController.navigate(NavRoutes.SELECT_TIME_SLOT)
+                    },
+                    colors = ButtonDefaults.buttonColors(Color.Blue)
+                ) {
+                    Text(text = "next")
+                }
             }
         }
     }
 
-
 }
 
 @Composable
-fun ServiceItemCard(serviceItem: ServiceItem){
+fun ServiceItemCard(serviceItem: Service, selectedServices: MutableList<Service>) {
     val selectedOption = remember { mutableStateOf("unselected") }
     Card(
         Modifier
@@ -97,7 +125,7 @@ fun ServiceItemCard(serviceItem: ServiceItem){
             val (itemImage, itemTitle, itemSelector, itemDetailBox) = createRefs()
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
-                contentDescription = serviceItem.title,
+                contentDescription = serviceItem.name,
                 modifier = Modifier
                     .height(100.dp)
                     .width(100.dp)
@@ -113,8 +141,10 @@ fun ServiceItemCard(serviceItem: ServiceItem){
                 onClick = {
                     if (selectedOption.value == "selected") {
                         selectedOption.value = "unselected"
+                        selectedServices.remove(serviceItem)
                     } else {
                         selectedOption.value = "selected"
+                        selectedServices.add(serviceItem)
                     }
                 },
                 colors = RadioButtonDefaults.colors(
@@ -127,7 +157,7 @@ fun ServiceItemCard(serviceItem: ServiceItem){
                     end.linkTo(parent.end)
                 }
             )
-            Text(text = serviceItem.title,
+            Text(text = serviceItem.name,
                 fontSize = 20.sp,
                 modifier = Modifier
                     .padding(10.dp)
@@ -136,7 +166,7 @@ fun ServiceItemCard(serviceItem: ServiceItem){
                         start.linkTo(itemImage.end)
                     })
             Row(
-                modifier = Modifier.constrainAs(itemDetailBox){
+                modifier = Modifier.constrainAs(itemDetailBox) {
                     top.linkTo(itemTitle.bottom)
                     bottom.linkTo(parent.bottom)
                     start.linkTo(itemImage.end)
@@ -161,22 +191,12 @@ fun ServiceItemCard(serviceItem: ServiceItem){
     }
 }
 
-@Composable
-fun testCard(){
-    ServiceItemCard(serviceItem = ServiceItem(
-        "",
-        "test",
-        4f,
-        15f
-    ))
-}
-
-private fun getServiceItems():List<ServiceItem>{
+private fun getServiceItems(): List<ServiceItem> {
     return listOf(
-        ServiceItem("","service1",5f,15f),
-        ServiceItem("","service2",10f,15f),
-        ServiceItem("","service3",15f,15f),
-        ServiceItem("","service4",20f,15f),
-        ServiceItem("","service5",10f,15f),
+        ServiceItem("", "service1", 5f, 15f),
+        ServiceItem("", "service2", 10f, 15f),
+        ServiceItem("", "service3", 15f, 15f),
+        ServiceItem("", "service4", 20f, 15f),
+        ServiceItem("", "service5", 10f, 15f),
     )
 }
