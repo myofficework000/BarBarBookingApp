@@ -10,5 +10,6 @@ data class Barber(
     val firstName: String,
     val lastName: String,
     val experience: String,
-    val rating: Int
+    val rating: Int,
+    val image: String
 )

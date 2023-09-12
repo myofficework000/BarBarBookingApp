@@ -38,4 +38,6 @@ interface IRepository {
 
     suspend fun updateAppointmentStatus(appointmentId: Int, status: Status)
 
+    fun getAppointmentDuration(appointmentId: Int): Flow<Int?>
+
 }

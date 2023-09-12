@@ -84,6 +84,9 @@ class BarberViewModel @Inject constructor(
     val selectedAppointmentWithServices: LiveData<AppointmentWithServices> = _selectedAppointmentId.switchMap { id ->
         repository.getAppointmentWithServices(id).asLiveData()
     }
+    val selectedAppointmentDuration: LiveData<Int?> = _selectedAppointmentId.switchMap { id ->
+        repository.getAppointmentDuration(id).asLiveData()
+    }
 
     fun selectedUserId(userId: Int) {
         _selectedUserId.value = userId

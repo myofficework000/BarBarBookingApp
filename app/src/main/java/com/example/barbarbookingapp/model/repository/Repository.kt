@@ -65,4 +65,6 @@ override suspend fun getAllUser(): Flow<ResultState<List<User>>> {
 
     override suspend fun updateAppointmentStatus(appointmentId: Int, status: Status) = appointmentDao.updateAppointmentStatus(appointmentId, status)
 
+    override fun getAppointmentDuration(appointmentId: Int): Flow<Int?> = appointmentDao.getAppointmentDuration(appointmentId)
+
 }

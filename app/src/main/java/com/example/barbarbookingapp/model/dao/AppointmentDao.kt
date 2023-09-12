@@ -30,4 +30,13 @@ interface AppointmentDao {
 
     @Query("UPDATE appointments SET status = :status WHERE appointmentId = :appointmentId")
     suspend fun updateAppointmentStatus(appointmentId: Int, status: Status)
+
+    @Query("""
+        SELECT SUM(services.duration) 
+        FROM services 
+        INNER JOIN appointment_service_cross_ref 
+        ON services.serviceId = appointment_service_cross_ref.serviceId 
+        WHERE appointment_service_cross_ref.appointmentId = :appointmentId
+    """)
+    fun getAppointmentDuration(appointmentId: Int): Flow<Int?>
 }

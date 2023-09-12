@@ -20,4 +20,6 @@ interface ServiceDao {
 
     @Query("SELECT price FROM services WHERE serviceId IN (:serviceIds)")
     fun getServicePrices(serviceIds: List<Int>): Flow<List<Double>>
+
+
 }

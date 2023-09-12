@@ -9,5 +9,6 @@ data class Service(
     var serviceId: Int = 0,
     val name: String,
     val duration: Int,
-    val price: Double
+    val price: Double,
+    val image: String
 )
