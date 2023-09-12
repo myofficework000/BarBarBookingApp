@@ -14,10 +14,11 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.navigation.NavController
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
-fun UserAppointmentsScreen(viewModel: BarberViewModel, userId: Int) {
+fun AppointmentList(viewModel: BarberViewModel, userId: Int, navController: NavController) {
 
     LaunchedEffect(key1 = true) {
         viewModel.selectedUserId(userId)

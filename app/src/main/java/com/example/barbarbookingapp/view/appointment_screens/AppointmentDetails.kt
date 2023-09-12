@@ -19,12 +19,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
 import com.example.barbarbookingapp.model.dto.Service
+import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
-@Preview
 @Composable
-fun AppointmentDetails(){
+fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navController: NavController){
     val services = listOf(
         Service(1, "Haircut", 30, 40.0),
         Service(2, "Massage", 60, 100.0)
