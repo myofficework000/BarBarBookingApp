@@ -1,5 +1,6 @@
 package com.example.barbarbookingapp.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -9,6 +10,10 @@ import com.example.barbarbookingapp.model.dto.AppointmentWithServices
 import com.example.barbarbookingapp.model.dto.Service
 import com.example.barbarbookingapp.model.repository.Repository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flatMapConcat
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 @HiltViewModel
@@ -36,16 +41,5 @@ class AppointmentViewModel @Inject constructor(repository: Repository) : ViewMod
 
     fun setStartTime(startTime: Pair<Int, Int>) {
         _selectedStartTime.postValue(startTime)
-    }
-
-    fun fetchAppointmentWithServicesByAppointmentId(repository: Repository) {
-        allApptIdsSet?.run {
-            val appointmentWithServices = mutableListOf<AppointmentWithServices>()
-            for (i in this@run) {
-                val item = repository.getAppointmentWithServices(i).asLiveData().value!!
-                appointmentWithServices.add(item)
-            }
-            _appointmentWithServices.postValue(appointmentWithServices)
-        }
     }
 }

@@ -15,7 +15,6 @@ import com.example.barbarbookingapp.view.intro_screens.SignUp
 import com.example.barbarbookingapp.view.intro_screens.SplashScreen
 import com.example.barbarbookingapp.view.service_screens.SelectServiceScreen
 import com.example.barbarbookingapp.view.service_screens.SelectTimeSlotScreen
-import com.example.barbarbookingapp.viewmodel.AppointmentViewModel
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
@@ -30,7 +29,7 @@ fun MyApp() {
         composable(route = Screen.Splash.route) { SplashScreen(navController) }
         composable(route = Screen.Login.route) { Login(navController) }
         composable(route = Screen.SignUp.route) { SignUp(navController) }
-        composable(route = Screen.SelectTimeSlot.route) { SelectTimeSlotScreen(viewModel) }
+        composable(route = Screen.SelectTimeSlot.route) { SelectTimeSlotScreen(viewModel, navController) }
         composable(route = Screen.SelectService.route) { SelectServiceScreen(viewModel,navController) }
         composable(route = Screen.DashboardScreen.route) { DashboardScreen(navController) }
         composable(route = Screen.AppointmentList.route) { AppointmentList(viewModel = viewModel, userId = 1, navController) }
