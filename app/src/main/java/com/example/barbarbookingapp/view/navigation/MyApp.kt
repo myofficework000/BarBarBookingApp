@@ -5,6 +5,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.barbarbookingapp.view.intro_screens.DashboardScreen
 import com.example.barbarbookingapp.view.intro_screens.Login
 import com.example.barbarbookingapp.view.intro_screens.SignUp
 import com.example.barbarbookingapp.view.intro_screens.SplashScreen
@@ -20,12 +21,13 @@ fun MyApp() {
     val viewModel: BarberViewModel = hiltViewModel()
     NavHost(
         navController = navController,
-        startDestination = Screen.SelectService.route
+        startDestination = Screen.Login.route
     ) {
         composable(route = Screen.Splash.route) { SplashScreen(navController) }
         composable(route = Screen.Login.route) { Login(navController) }
         composable(route = Screen.SignUp.route) { SignUp(navController) }
         composable(route = Screen.SelectTimeSlot.route) { SelectTimeSlotScreen(viewModel) }
         composable(route = Screen.SelectService.route) { SelectServiceScreen(viewModel,navController) }
+        composable(route = Screen.DashboardScreen.route) { DashboardScreen(navController) }
     }
 }
