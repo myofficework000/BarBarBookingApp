@@ -36,7 +36,6 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
-import com.example.barbarbookingapp.ServiceItem
 import com.example.barbarbookingapp.model.dto.Service
 import com.example.barbarbookingapp.view.navigation.NavRoutes
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
@@ -189,14 +188,4 @@ fun ServiceItemCard(serviceItem: Service, selectedServices: MutableList<Service>
             }
         }
     }
-}
-
-private fun getServiceItems(): List<ServiceItem> {
-    return listOf(
-        ServiceItem("", "service1", 5f, 15f),
-        ServiceItem("", "service2", 10f, 15f),
-        ServiceItem("", "service3", 15f, 15f),
-        ServiceItem("", "service4", 20f, 15f),
-        ServiceItem("", "service5", 10f, 15f),
-    )
 }

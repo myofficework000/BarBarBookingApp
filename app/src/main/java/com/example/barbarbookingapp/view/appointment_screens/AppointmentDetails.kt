@@ -27,8 +27,8 @@ import com.example.barbarbookingapp.viewmodel.BarberViewModel
 @Composable
 fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navController: NavController){
     val services = listOf(
-        Service(1, "Haircut", 30, 40.0),
-        Service(2, "Massage", 60, 100.0)
+        Service(1, "Haircut", 30, 40.0,""),
+        Service(2, "Massage", 60, 100.0,"")
     )
     ConstraintLayout(
         modifier = Modifier
