@@ -25,8 +25,7 @@ fun MyApp() {
     val viewModel: BarberViewModel = hiltViewModel()
     NavHost(
         navController = navController,
-        //startDestination = Screen.Login.route
-        startDestination = Screen.AppointmentList.route
+        startDestination = Screen.Login.route
     ) {
         composable(route = Screen.Splash.route) { SplashScreen(navController) }
         composable(route = Screen.Login.route) { Login(navController) }
