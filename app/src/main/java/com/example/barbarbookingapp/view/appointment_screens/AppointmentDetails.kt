@@ -1,6 +1,5 @@
 package com.example.barbarbookingapp.view.appointment_screens
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -22,26 +21,18 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
-import com.example.barbarbookingapp.model.dto.Service
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
 fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navController: NavController){
-
-    val services = listOf(
-        Service(1, "Haircut", 30, 40.0,""),
-        Service(2, "Massage", 60, 100.0,"")
-    )
 
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
