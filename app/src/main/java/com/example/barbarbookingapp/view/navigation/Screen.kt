@@ -17,6 +17,6 @@ sealed class Screen(val route: String) {
     object SelectService : Screen(SELECT_SERVICE)
     object DashboardScreen : Screen(DASHBOARD)
     object AppointmentList: Screen(APPOINTMENT_LIST)
-    object AppointmentDetails: Screen(APPOINTMENT_DETAILS)
+    class AppointmentDetails(val appointmentId: Int): Screen("${NavRoutes.APPOINTMENT_DETAILS}/$appointmentId")
 
 }

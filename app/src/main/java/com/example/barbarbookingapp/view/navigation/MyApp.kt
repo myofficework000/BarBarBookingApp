@@ -2,9 +2,11 @@ package com.example.barbarbookingapp.view.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.navigation.NavType
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import androidx.navigation.navArgument
 import com.example.barbarbookingapp.view.appointment_screens.AppointmentDetails
 import com.example.barbarbookingapp.view.appointment_screens.AppointmentList
 import com.example.barbarbookingapp.view.intro_screens.DashboardScreen
@@ -31,6 +33,12 @@ fun MyApp() {
         composable(route = Screen.SelectService.route) { SelectServiceScreen(viewModel,navController) }
         composable(route = Screen.DashboardScreen.route) { DashboardScreen(navController) }
         composable(route = Screen.AppointmentList.route) { AppointmentList(viewModel = viewModel, userId = 1, navController) }
-        composable(route = Screen.AppointmentDetails.route) { AppointmentDetails(viewModel = viewModel, appointmentId = 1, navController) }
+        composable(
+            route = "${NavRoutes.APPOINTMENT_DETAILS}/{appointmentId}",
+            arguments = listOf(navArgument("appointmentId") { type = NavType.IntType })
+        ) { backStackEntry ->
+            val appointmentId = backStackEntry.arguments?.getInt("appointmentId") ?: 0
+            AppointmentDetails(viewModel = viewModel, appointmentId = appointmentId, navController = navController)
+        }
     }
 }
