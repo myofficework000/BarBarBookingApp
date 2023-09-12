@@ -35,6 +35,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
+import com.example.barbarbookingapp.view.navigation.NavRoutes.DASHBOARD
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SIGNUP
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -105,7 +106,7 @@ fun Login(navController: NavController){
             )
 
             Button(
-                onClick = {/* NAVIGATE TO HOME SCREEN IF SUCCESSFUL */},
+                onClick = {navController.navigate(DASHBOARD)},
                 Modifier
                     .width(200.dp)
                     .padding(top = 10.dp)

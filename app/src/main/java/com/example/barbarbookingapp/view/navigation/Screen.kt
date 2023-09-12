@@ -1,5 +1,6 @@
 package com.example.barbarbookingapp.view.navigation
 
+import com.example.barbarbookingapp.view.navigation.NavRoutes.DASHBOARD
 import com.example.barbarbookingapp.view.navigation.NavRoutes.LOGIN
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SELECT_SERVICE
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SELECT_TIME_SLOT
@@ -12,4 +13,5 @@ sealed class Screen(val route: String) {
     object SignUp : Screen(SIGNUP)
     object SelectTimeSlot : Screen(SELECT_TIME_SLOT)
     object SelectService : Screen(SELECT_SERVICE)
+    object DashboardScreen : Screen(DASHBOARD)
 }
