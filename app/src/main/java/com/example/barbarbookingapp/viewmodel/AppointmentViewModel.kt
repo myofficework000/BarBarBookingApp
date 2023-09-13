@@ -22,12 +22,6 @@ class AppointmentViewModel @Inject constructor(repository: Repository) : ViewMod
     private var _selectedStartTime = MutableLiveData<Pair<Int, Int>>()
     var selectedStartTime = _selectedStartTime
 
-    //history appointments
-    private var _allAppointments = repository.getAppointmentsForUser(1)
-    private val allApptIdsSet = _allAppointments.asLiveData().value?.map { it.appointmentId }
-    private var _appointmentWithServices = MutableLiveData<List<AppointmentWithServices>>()
-    var appointmentWithServices:LiveData<List<AppointmentWithServices>> = _appointmentWithServices
-
     //services list
     private var _allServices = repository.getAllServices()
     var allServices = _allServices.asLiveData()

@@ -6,12 +6,12 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
@@ -33,44 +33,67 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.constraintlayout.compose.ConstraintLayout
+import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.model.Utils.formatDateFromString
 import com.example.barbarbookingapp.model.Utils.formatDateIntoString
 import com.example.barbarbookingapp.model.Utils.formatIntoTime
 import com.example.barbarbookingapp.model.Utils.isDate
 import com.example.barbarbookingapp.view.navigation.NavRoutes
+import com.example.barbarbookingapp.view.theme.CancelRed
+import com.example.barbarbookingapp.view.theme.NextBlue
+import com.example.barbarbookingapp.view.theme.Purple80
+import com.example.barbarbookingapp.view.theme.PurpleGrey80
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 import java.util.Calendar
 import java.util.Date
 
 @Composable
-//@Preview(showBackground = true)
 fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavController) {
     viewModel.setStartTime(Pair(9, 0))
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally
+    var selectDate by remember { mutableStateOf(Date()) }
+    ConstraintLayout(
+        modifier = Modifier.fillMaxSize()
     ) {
-        TopDateSelectBar()
-        TimeSlotGrid(viewModel)
+        val (dateBar, timeSlotGrid, buttonGroup) = createRefs()
+
+        TopDateSelectBar(viewModel = viewModel, modifier = Modifier.constrainAs(dateBar) {
+            top.linkTo(parent.top)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+        })
+        TimeSlotGrid(viewModel = viewModel, modifier = Modifier.constrainAs(timeSlotGrid) {
+            top.linkTo(dateBar.bottom, 10.dp)
+            start.linkTo(parent.start)
+            end.linkTo(parent.end)
+            bottom.linkTo(buttonGroup.top)
+            height = Dimension.fillToConstraints
+        })
         Row(
-            modifier = Modifier.fillMaxWidth(),
+            modifier = Modifier
+                .fillMaxWidth()
+                .constrainAs(buttonGroup) {
+                    start.linkTo(parent.start)
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                },
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
                 onClick = { },
-                colors = ButtonDefaults.buttonColors(Color.Red)
+                colors = ButtonDefaults.buttonColors(CancelRed)
             ) {
                 Text(text = "Cancel")
             }
             Spacer(modifier = Modifier.padding(10.dp))
             Button(
                 onClick = {
-                    navController.navigate(NavRoutes.APPOINTMENT_DETAILS)
+                    //save appointment into database
+                    //navController.navigate(NavRoutes.APPOINTMENT_DETAILS)
                 },
-                colors = ButtonDefaults.buttonColors(Color.Blue)
+                colors = ButtonDefaults.buttonColors(NextBlue)
             ) {
                 Text(text = "Next")
             }
@@ -80,17 +103,20 @@ fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavControlle
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-@Preview
-fun TopDateSelectBar() {
+fun TopDateSelectBar(viewModel: BarberViewModel, modifier: Modifier) {
     var isExpanded by remember {
         mutableStateOf(false)
     }
     var date by remember {
         mutableStateOf(Date())
     }
-    ExposedDropdownMenuBox(expanded = isExpanded, onExpandedChange = { isExpanded = it }) {
+    ExposedDropdownMenuBox(
+        expanded = isExpanded,
+        onExpandedChange = { isExpanded = it },
+        modifier = modifier
+    ) {
         Row(
-            modifier = Modifier
+            modifier = modifier
                 .menuAnchor()
                 .padding(10.dp)
         ) {
@@ -106,6 +132,7 @@ fun TopDateSelectBar() {
                     },
                     onClick = {
                         date = it
+                        viewModel.setSelectedDate(date)
                         isExpanded = false
                     }
                 )
@@ -116,21 +143,24 @@ fun TopDateSelectBar() {
 
 @SuppressLint("MutableCollectionMutableState")
 @Composable
-fun TimeSlotGrid(viewModel: BarberViewModel) {
+fun TimeSlotGrid(viewModel: BarberViewModel, modifier: Modifier) {
     var startTime by remember { mutableStateOf(Pair(0, 0)) }
     val curDayOccupation by remember { mutableStateOf(HashMap<Pair<Int, Int>, Int>()) }
-
+    var selectedDate = viewModel.selectedDate.observeAsState()
     val appointments = viewModel.allAppointments.observeAsState()
 
     appointments.value?.let { appointmentWithServices ->
         for (appointmentWithService in appointmentWithServices) {
-            val historyDate = appointmentWithService.appointment.appointmentDate.formatDateFromString()
+            val historyDate =
+                appointmentWithService.appointment.appointmentDate.formatDateFromString()
             historyDate?.let { date ->
-                if (date.isDate(Date())) {
+                if (date.isDate(selectedDate.value ?: Date())) {
                     val totalDuration = appointmentWithService.services.map { it.duration }.sum()
                     val appointmentTime =
                         appointmentWithService.appointment.appointmentTime.formatIntoTime()
                     curDayOccupation[appointmentTime] = totalDuration
+                } else {
+                    curDayOccupation.clear()
                 }
             }
         }
@@ -140,7 +170,7 @@ fun TimeSlotGrid(viewModel: BarberViewModel) {
     val serviceDuration = services.value?.sumOf { it.duration } ?: 15
     LazyVerticalGrid(
         columns = GridCells.Adaptive(minSize = 80.dp),
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier,
         verticalArrangement = Arrangement.spacedBy(10.dp),
         horizontalArrangement = Arrangement.spacedBy(5.dp)
     ) {
@@ -149,8 +179,9 @@ fun TimeSlotGrid(viewModel: BarberViewModel) {
             val isOccupied = isSlotInRange(curTime, startTime, serviceDuration)
             var isBooked = isSlotBooked(curTime, curDayOccupation)
             Card(
-                modifier = Modifier
-                    .padding(10.dp)
+                modifier = modifier
+                    .padding(5.dp)
+                    .size(100.dp, 60.dp)
                     .clickable {
                         viewModel.setStartTime(curTime)
                         startTime = curTime
@@ -160,9 +191,13 @@ fun TimeSlotGrid(viewModel: BarberViewModel) {
             ) {
                 Box(
                     contentAlignment = Alignment.Center,
-                    modifier = Modifier
+                    modifier = modifier
                         .fillMaxSize()
-                        .background(if (isOccupied || isBooked) Color.Gray else Color.White)
+                        .background(
+                            if (isBooked) PurpleGrey80
+                            else if (isOccupied) Purple80
+                            else Color.White
+                        )
                 ) {
                     var minutes = "${curTime.second}"
                     if (curTime.second / 10 == 0) minutes = "0${curTime.second}"
@@ -198,9 +233,12 @@ private fun isSlotInRange(
     return currentPoint >= startPoint && currentPoint < (startPoint + serviceDuration)
 }
 
-private fun isSlotBooked(curTime: Pair<Int, Int>, curDayOccupation: HashMap<Pair<Int, Int>, Int>):Boolean {
-    curDayOccupation.forEach{(key,value) ->
-        if(isSlotInRange(curTime, key, value)) return true
+private fun isSlotBooked(
+    curTime: Pair<Int, Int>,
+    curDayOccupation: HashMap<Pair<Int, Int>, Int>
+): Boolean {
+    curDayOccupation.forEach { (key, value) ->
+        if (isSlotInRange(curTime, key, value)) return true
     }
     return false
 }
@@ -215,10 +253,4 @@ private fun getFutureSevenDays(): List<Date> {
     }
 
     return dateList
-}
-
-@Composable
-@Preview
-fun ShowTestScreen() {
-//    TimeSlotGrid(SelectTimeViewModel())
 }

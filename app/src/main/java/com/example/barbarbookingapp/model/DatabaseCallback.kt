@@ -57,7 +57,7 @@ fun dataCallback(context: Context) = object : RoomDatabase.Callback() {
             val totalServiceCharge2 = servicePrices2.sum()
             val totalServiceCharge3 = servicePrices3.sum()
             val appointment1 = Appointment(userId = 1, barberId = 1, appointmentDate = "2023-08-30", appointmentTime = "10:00", serviceCharge = totalServiceCharge1, status = Status.COMPLETED, paymentMethod = PaymentMethod.CASH)
-            val appointment2 = Appointment(userId = 2, barberId = 3, appointmentDate = "2023-09-12", appointmentTime = "14:00", serviceCharge = totalServiceCharge2, status = Status.SCHEDULED, paymentMethod = PaymentMethod.CASH)
+            val appointment2 = Appointment(userId = 2, barberId = 3, appointmentDate = "2023-09-13", appointmentTime = "14:00", serviceCharge = totalServiceCharge2, status = Status.SCHEDULED, paymentMethod = PaymentMethod.CASH)
             val appointment3 = Appointment(userId = 1, barberId = 2, appointmentDate = "2023-09-30", appointmentTime = "11:00", serviceCharge = totalServiceCharge3, status = Status.SCHEDULED, paymentMethod = PaymentMethod.CASH)
             val appointmentId1 = appointmentDao.insertAppointment(appointment1)
             val appointmentId2 = appointmentDao.insertAppointment(appointment2)
