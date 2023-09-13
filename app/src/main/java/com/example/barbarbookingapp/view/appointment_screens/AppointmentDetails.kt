@@ -14,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,6 +30,8 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
+import com.example.barbarbookingapp.view.navigation.NavRoutes.SALON_INFORMATION
+import com.example.barbarbookingapp.view.navigation.Screen
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
@@ -51,7 +54,7 @@ fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navContro
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)) {
-        val (dateTimeTitle, dateText, timeText, idText, statusText, barberTitle, barberCard, serviceTitle, serviceList, billText ) = createRefs()
+        val (dateTimeTitle, dateText, timeText, idText, statusText, barberTitle, barberCard, storeLink, serviceTitle, serviceList, billText ) = createRefs()
         appointmentWithServices?.let {
             Text(
                 modifier = Modifier
@@ -154,10 +157,21 @@ fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navContro
                 }
             }
 
+            TextButton(
+                modifier = Modifier
+                    .constrainAs(storeLink){
+                        end.linkTo(parent.end)
+                        top.linkTo(barberCard.bottom)
+                    },
+                onClick = { navController.navigate(SALON_INFORMATION) }
+            ) {
+                Text(text = "View Store Details")
+            }
+
             Text(
                 modifier = Modifier
                     .constrainAs(serviceTitle) {
-                        top.linkTo(barberCard.bottom)
+                        top.linkTo(storeLink.bottom)
                         start.linkTo(parent.start)
                     }
                     .padding(0.dp, 10.dp),

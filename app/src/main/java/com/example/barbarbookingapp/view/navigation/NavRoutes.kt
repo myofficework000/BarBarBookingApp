@@ -9,4 +9,5 @@ object NavRoutes {
     const val DASHBOARD = "DashboardScreen"
     const val APPOINTMENT_LIST = "AppointmentList"
     const val APPOINTMENT_DETAILS = "AppointmentDetails"
+    const val SALON_INFORMATION = "SalonInformation"
 }
