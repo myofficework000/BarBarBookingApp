@@ -36,7 +36,7 @@ fun MyApp() {
         composable(route = Screen.SelectService.route) { SelectServiceScreen(viewModel,navController) }
         composable(route = Screen.DashboardScreen.route) { DashboardScreen(navController) }
         composable(route = Screen.SalonInformation.route) { SalonInformation(navController)}
-        composable(route = Screen.AppointmentList.route) { AppointmentList(viewModel = viewModel, userId = 1, navController) }
+        composable(route = Screen.AppointmentList.route) { AppointmentList(viewModel = viewModel, navController) }
         composable(
             route = "${NavRoutes.APPOINTMENT_DETAILS}/{appointmentId}",
             arguments = listOf(navArgument("appointmentId") { type = NavType.IntType })

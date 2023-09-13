@@ -25,17 +25,21 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
+import com.example.barbarbookingapp.model.SharedPref
 import com.example.barbarbookingapp.view.navigation.Screen
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
-fun AppointmentList(viewModel: BarberViewModel, userId: Int, navController: NavController) {
-
+fun AppointmentList(viewModel: BarberViewModel, navController: NavController) {
+    val context = LocalContext.current
+    val sharedPref = SharedPref.getSecuredSharedPreferences(context)
+    val userId = sharedPref.getInt("user_id",0)
     LaunchedEffect(key1 = true) {
         viewModel.selectedUserId(userId)
     }
