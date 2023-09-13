@@ -3,6 +3,7 @@ package com.example.barbarbookingapp.view.service_screens
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -27,8 +28,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
@@ -110,6 +113,7 @@ fun SelectServiceScreen(viewModel: BarberViewModel, navController: NavController
 @Composable
 fun ServiceItemCard(serviceItem: Service, selectedServices: MutableList<Service>) {
     val selectedOption = remember { mutableStateOf("unselected") }
+    var showDialog by remember { mutableStateOf(false) }
     Card(
         Modifier
             .padding(3.dp)
@@ -120,8 +124,18 @@ fun ServiceItemCard(serviceItem: Service, selectedServices: MutableList<Service>
                 .background(Color.White)
                 .padding(5.dp)
                 .fillMaxWidth()
+                .clickable {
+                    showDialog = true
+                }
         ) {
             val (itemImage, itemTitle, itemSelector, itemDetailBox) = createRefs()
+            if(showDialog){
+                ServiceDetailDialog(service = serviceItem, object :OnDialogClose{
+                    override fun closeDialog(close: Boolean) {
+                        showDialog = false
+                    }
+                })
+            }
             Image(
                 painter = painterResource(id = R.drawable.ic_launcher_foreground),
                 contentDescription = serviceItem.name,

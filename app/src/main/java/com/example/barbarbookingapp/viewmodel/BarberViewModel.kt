@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 @HiltViewModel
@@ -51,6 +52,9 @@ class BarberViewModel @Inject constructor(
     //appointment start time
     private var _selectedStartTime = MutableLiveData<Pair<Int, Int>>()
     var selectedStartTime = _selectedStartTime
+
+    private var _selectedDate = MutableLiveData<Date>()
+    var selectedDate = _selectedDate
 
     //history appointments, testing user id 2
     var allAppointments =
@@ -85,6 +89,10 @@ class BarberViewModel @Inject constructor(
 
     fun setStartTime(startTime: Pair<Int, Int>) {
         _selectedStartTime.postValue(startTime)
+    }
+
+    fun setSelectedDate(date: Date){
+        _selectedDate.postValue(date)
     }
 
     private val _selectedAppointmentId = MutableLiveData<Int>()
