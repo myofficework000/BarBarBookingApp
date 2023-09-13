@@ -1,6 +1,9 @@
 package com.example.barbarbookingapp.model
 
 import android.annotation.SuppressLint
+import android.content.Context
+import android.content.SharedPreferences
+import android.widget.Toast
 import java.text.ParseException
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -40,5 +43,9 @@ object Utils {
     fun String.formatIntoTime():Pair<Int,Int>{
         val time = this.split(":")
         return Pair(time[0].toInt(),time[1].toInt())
+    }
+
+    fun makeToast(context: Context, msg:String){
+        Toast.makeText(context,msg,Toast.LENGTH_SHORT).show()
     }
 }

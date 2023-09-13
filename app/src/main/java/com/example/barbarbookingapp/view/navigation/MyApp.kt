@@ -17,18 +17,20 @@ import com.example.barbarbookingapp.view.intro_screens.SplashScreen
 import com.example.barbarbookingapp.view.service_screens.SelectServiceScreen
 import com.example.barbarbookingapp.view.service_screens.SelectTimeSlotScreen
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
+import com.example.barbarbookingapp.viewmodel.UserViewModel
 
 @Composable
 fun MyApp() {
 
     val navController = rememberNavController()
     val viewModel: BarberViewModel = hiltViewModel()
+    val userViewModel:UserViewModel = hiltViewModel()
     NavHost(
         navController = navController,
-        startDestination = Screen.SelectService.route
+        startDestination = Screen.Splash.route
     ) {
         composable(route = Screen.Splash.route) { SplashScreen(navController) }
-        composable(route = Screen.Login.route) { Login(navController) }
+        composable(route = Screen.Login.route) { Login(navController, userViewModel) }
         composable(route = Screen.SignUp.route) { SignUp(navController) }
         composable(route = Screen.SelectTimeSlot.route) { SelectTimeSlotScreen(viewModel, navController) }
         composable(route = Screen.SelectService.route) { SelectServiceScreen(viewModel,navController) }

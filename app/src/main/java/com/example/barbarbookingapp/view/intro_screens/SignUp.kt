@@ -132,7 +132,9 @@ fun SignUp(navController: NavController) {
             )
 
             Button(
-                onClick = {},
+                onClick = {
+
+                },
                 Modifier
                     .width(200.dp)
                     .padding(top = 10.dp)
