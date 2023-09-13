@@ -31,16 +31,15 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SALON_INFORMATION
-import com.example.barbarbookingapp.view.navigation.Screen
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
 fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navController: NavController){
 
-    val services = listOf(
-        Service(1, "Haircut", 30, 40.0,""),
-        Service(2, "Massage", 60, 100.0,"")
-    )
+//    val services = listOf(
+//        Service(1, "Haircut", 30, 40.0,""),
+//        Service(2, "Massage", 60, 100.0,"")
+//    )
 
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {

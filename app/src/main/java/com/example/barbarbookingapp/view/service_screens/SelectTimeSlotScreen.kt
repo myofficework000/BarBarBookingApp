@@ -24,6 +24,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -33,10 +34,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.unit.dp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.constraintlayout.compose.Dimension
 import androidx.navigation.NavController
+import com.example.barbarbookingapp.model.SharedPref
 import com.example.barbarbookingapp.model.Utils.formatDateFromString
 import com.example.barbarbookingapp.model.Utils.formatDateIntoString
 import com.example.barbarbookingapp.model.Utils.formatIntoTime
@@ -47,13 +50,13 @@ import com.example.barbarbookingapp.view.theme.NextBlue
 import com.example.barbarbookingapp.view.theme.Purple80
 import com.example.barbarbookingapp.view.theme.PurpleGrey80
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
+import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 import java.util.Date
 
 @Composable
 fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavController) {
     viewModel.setStartTime(Pair(9, 0))
-    var selectDate by remember { mutableStateOf(Date()) }
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -144,9 +147,15 @@ fun TopDateSelectBar(viewModel: BarberViewModel, modifier: Modifier) {
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun TimeSlotGrid(viewModel: BarberViewModel, modifier: Modifier) {
+    val context = LocalContext.current
     var startTime by remember { mutableStateOf(Pair(0, 0)) }
     val curDayOccupation by remember { mutableStateOf(HashMap<Pair<Int, Int>, Int>()) }
     var selectedDate = viewModel.selectedDate.observeAsState()
+    LaunchedEffect(key1 = true) {
+        val sharedPref = SharedPref.getSecuredSharedPreferences(context)
+        val userId = sharedPref.getInt("user_id",0)
+        viewModel.fetchHistoryAppointmentForUser(userId)
+    }
     val appointments = viewModel.allAppointments.observeAsState()
 
     appointments.value?.let { appointmentWithServices ->

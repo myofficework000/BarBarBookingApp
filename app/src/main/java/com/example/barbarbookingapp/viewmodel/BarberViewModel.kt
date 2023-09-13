@@ -14,6 +14,7 @@ import com.example.barbarbookingapp.model.dto.Service
 import com.example.barbarbookingapp.model.dto.User
 import com.example.barbarbookingapp.model.repository.IRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapConcat
 import kotlinx.coroutines.flow.flow
@@ -57,24 +58,8 @@ class BarberViewModel @Inject constructor(
     var selectedDate = _selectedDate
 
     //history appointments, testing user id 2
-    var allAppointments =
-        repository.getAppointmentsForUser(2)
-            .map { appts ->
-                Log.i("flow", "now processing appts")
-                appts.map { it.appointmentId }.toList()
-            }
-            .flatMapConcat { idList ->
-                Log.i("flow", "now processing idlist")
-                flow {
-                    val appointmentList = idList.map { id ->
-                        Log.i("flow", "now processing $id")
-                        repository.getAppointmentWithServices(id)
-                            .first() // first() to get first value for each id
-                    }
-                    emit(appointmentList)
-                }
-            }.asLiveData()
-
+    private var _allAppointments = MutableLiveData<List<AppointmentWithServices>>()
+    var allAppointments = _allAppointments
 
     //services list
     private var _allServices = repository.getAllServices()
@@ -91,8 +76,29 @@ class BarberViewModel @Inject constructor(
         _selectedStartTime.postValue(startTime)
     }
 
-    fun setSelectedDate(date: Date){
+    fun setSelectedDate(date: Date) {
         _selectedDate.postValue(date)
+    }
+
+    suspend fun fetchHistoryAppointmentForUser(userId: Int){
+        repository.getAppointmentsForUser(userId)
+            .map { appts ->
+                Log.i("flow", "now processing appts")
+                appts.map { it.appointmentId }.toList()
+            }
+            .flatMapConcat { idList ->
+                Log.i("flow", "now processing idlist")
+                flow {
+                    val appointmentList = idList.map { id ->
+                        Log.i("flow", "now processing $id")
+                        repository.getAppointmentWithServices(id)
+                            .first() // first() to get first value for each id
+                    }
+                    emit(appointmentList)
+                }
+            }.collect{
+                _allAppointments.postValue(it)
+            }
     }
 
     private val _selectedAppointmentId = MutableLiveData<Int>()
