@@ -9,6 +9,7 @@ import androidx.navigation.compose.rememberNavController
 import androidx.navigation.navArgument
 import com.example.barbarbookingapp.view.appointment_screens.AppointmentDetails
 import com.example.barbarbookingapp.view.appointment_screens.AppointmentList
+import com.example.barbarbookingapp.view.appointment_screens.SalonInformation
 import com.example.barbarbookingapp.view.intro_screens.DashboardScreen
 import com.example.barbarbookingapp.view.intro_screens.Login
 import com.example.barbarbookingapp.view.intro_screens.SignUp
@@ -32,6 +33,7 @@ fun MyApp() {
         composable(route = Screen.SelectTimeSlot.route) { SelectTimeSlotScreen(viewModel, navController) }
         composable(route = Screen.SelectService.route) { SelectServiceScreen(viewModel,navController) }
         composable(route = Screen.DashboardScreen.route) { DashboardScreen(navController) }
+        composable(route = Screen.SalonInformation.route) { SalonInformation(navController)}
         composable(route = Screen.AppointmentList.route) { AppointmentList(viewModel = viewModel, userId = 1, navController) }
         composable(
             route = "${NavRoutes.APPOINTMENT_DETAILS}/{appointmentId}",

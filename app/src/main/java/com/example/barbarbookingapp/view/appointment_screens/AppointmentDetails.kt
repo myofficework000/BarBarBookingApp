@@ -1,6 +1,5 @@
 package com.example.barbarbookingapp.view.appointment_screens
 
-import androidx.annotation.DrawableRes
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -15,6 +14,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -22,26 +22,25 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
-import com.example.barbarbookingapp.model.dto.Service
+import com.example.barbarbookingapp.view.navigation.NavRoutes.SALON_INFORMATION
+import com.example.barbarbookingapp.view.navigation.Screen
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
 fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navController: NavController){
 
-//    val services = listOf(
-//        Service(1, "Haircut", 30, 40.0,""),
-//        Service(2, "Massage", 60, 100.0,"")
-//    )
+    val services = listOf(
+        Service(1, "Haircut", 30, 40.0,""),
+        Service(2, "Massage", 60, 100.0,"")
+    )
 
     val context = LocalContext.current
     LaunchedEffect(key1 = true) {
@@ -60,7 +59,7 @@ fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navContro
         modifier = Modifier
             .fillMaxSize()
             .padding(20.dp)) {
-        val (dateTimeTitle, dateText, timeText, idText, statusText, barberTitle, barberCard, serviceTitle, serviceList, billText ) = createRefs()
+        val (dateTimeTitle, dateText, timeText, idText, statusText, barberTitle, barberCard, storeLink, serviceTitle, serviceList, billText ) = createRefs()
         appointmentWithServices?.let {
             Text(
                 modifier = Modifier
@@ -163,10 +162,21 @@ fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navContro
                 }
             }
 
+            TextButton(
+                modifier = Modifier
+                    .constrainAs(storeLink){
+                        end.linkTo(parent.end)
+                        top.linkTo(barberCard.bottom)
+                    },
+                onClick = { navController.navigate(SALON_INFORMATION) }
+            ) {
+                Text(text = "View Store Details")
+            }
+
             Text(
                 modifier = Modifier
                     .constrainAs(serviceTitle) {
-                        top.linkTo(barberCard.bottom)
+                        top.linkTo(storeLink.bottom)
                         start.linkTo(parent.start)
                     }
                     .padding(0.dp, 10.dp),
