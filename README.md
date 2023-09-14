@@ -46,12 +46,17 @@ To use the BarBar Booking App, you need an Android device running Android 6.0 (M
    
 ### Built With
 
-- [Compose Jetpack](https://developer.android.com/jetpack/compose)
-- [Room DB](https://developer.android.com/jetpack/androidx/releases/room)
-- [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
-- [Dagger Hilt](https://dagger.dev/hilt/)
-- [Google Maps](https://developer.android.com/training/maps/maps-and-places)
-- [Lottie Animation](https://airbnb.design/lottie/)
+- [Compose Jetpack](https://developer.android.com/jetpack/compose): Jetpack Compose is Android's modern, fully declarative UI toolkit for building native user interfaces. It simplifies UI development and makes it more efficient.
+
+- [Room DB](https://developer.android.com/jetpack/androidx/releases/room): Room is an Android library that provides an abstraction layer over SQLite to allow for more robust database access while using less boilerplate code.
+
+- [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html): Kotlin Coroutines are used for asynchronous programming in Kotlin. They simplify dealing with concurrency and making asynchronous code more readable.
+
+- [Dagger Hilt](https://dagger.dev/hilt/): Dagger Hilt is a dependency injection library for Android that simplifies dependency injection in Android apps.
+
+- [Google Maps](https://developer.android.com/training/maps/maps-and-places): Google Maps integration allows users to view the location of barbershops and plan their appointments conveniently.
+
+- [Lottie Animation](https://airbnb.design/lottie/): Lottie is a library for Android that allows you to render After Effects animations in real-time. It's great for adding interactive animations to your app.
 
 ## Authors
 
