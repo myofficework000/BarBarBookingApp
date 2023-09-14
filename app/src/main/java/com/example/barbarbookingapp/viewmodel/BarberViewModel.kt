@@ -8,6 +8,7 @@ import androidx.lifecycle.asLiveData
 import androidx.lifecycle.switchMap
 import androidx.lifecycle.viewModelScope
 import com.example.barbarbookingapp.model.dto.Appointment
+import com.example.barbarbookingapp.model.dto.AppointmentServiceCrossRef
 import com.example.barbarbookingapp.model.dto.AppointmentWithServices
 import com.example.barbarbookingapp.model.dto.Barber
 import com.example.barbarbookingapp.model.dto.Service
@@ -55,8 +56,8 @@ class BarberViewModel @Inject constructor(
     private var _selectedStartTime = MutableLiveData<Pair<Int, Int>>()
     var selectedStartTime = _selectedStartTime
 
-    private var _selectedDate = MutableLiveData<Date>()
-    var selectedDate = _selectedDate
+    private var _selectedDate = MutableLiveData(Date())
+    var selectedDate:LiveData<Date> = _selectedDate
 
     //history appointments, testing user id 2
     private var _allAppointments = MutableLiveData<List<AppointmentWithServices>>()
@@ -69,6 +70,11 @@ class BarberViewModel @Inject constructor(
     //appointment selected services
     private val _selectedServices = MutableLiveData<List<Service>>()
     var selectedServices: LiveData<List<Service>> = _selectedServices
+
+    //for id
+    private val _appointmentId = MutableLiveData<Long>()
+    var appointmentId:LiveData<Long> = _appointmentId
+
     fun setSelectedServices(list: List<Service>) {
         _selectedServices.postValue(list)
     }
@@ -81,14 +87,15 @@ class BarberViewModel @Inject constructor(
         _selectedDate.postValue(date)
     }
 
-    suspend fun fetchHistoryAppointmentForUser(userId: Int){
+    private suspend fun fetchHistoryAppointmentForUser(userId: Int){
+        Log.i("flow","userId: $userId")
         repository.getAppointmentsForUser(userId)
             .map { appts ->
-                Log.i("flow", "now processing appts")
+                Log.i("flow", "now processing appts -> size:${appts.size}")
                 appts.map { it.appointmentId }.toList()
             }
             .flatMapConcat { idList ->
-                Log.i("flow", "now processing idlist")
+                Log.i("flow", "now processing idlist -> size:${idList.size}")
                 flow {
                     val appointmentList = idList.map { id ->
                         Log.i("flow", "now processing $id")
@@ -109,10 +116,6 @@ class BarberViewModel @Inject constructor(
         }
     val selectedAppointmentDuration: LiveData<Int?> = _selectedAppointmentId.switchMap { id ->
         repository.getAppointmentDuration(id).asLiveData()
-    }
-
-    fun updateAppointmentStatus(appointmentId: Int, status: Status) = viewModelScope.launch {
-        repository.updateAppointmentStatus(appointmentId, status)
     }
 
     fun selectedUserId(userId: Int) {
@@ -141,6 +144,25 @@ class BarberViewModel @Inject constructor(
 
     fun insertService(services: List<Service>) = viewModelScope.launch {
         repository.insertService(services)
+    }
+
+    fun insertAppointment(appointment: Appointment) = viewModelScope.launch {
+        val appointmentIdFromDB = repository.insertAppointment(appointment)
+        _appointmentId.postValue(appointmentIdFromDB)
+    }
+
+    fun insertAppointmentServiceCrossRef(crossRefs: List<AppointmentServiceCrossRef>) = viewModelScope.launch {
+        crossRefs.forEach {
+            repository.insertAppointmentServiceCrossRef(it)
+        }
+    }
+
+    fun fetchHistoryAppointmentForUserFromUI(userId:Int) = viewModelScope.launch {
+        fetchHistoryAppointmentForUser(userId = userId)
+    }
+
+    fun updateAppointmentStatus(appointmentId: Int, status: Status) = viewModelScope.launch {
+        repository.updateAppointmentStatus(appointmentId, status)
     }
 
 }

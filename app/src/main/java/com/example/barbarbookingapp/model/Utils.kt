@@ -12,8 +12,8 @@ import java.util.Locale
 
 object Utils {
     @SuppressLint("SimpleDateFormat")
-    fun String.formatDateFromString(): Date? {
-        val dateFormat = SimpleDateFormat("yyyy-MM-dd")
+    fun String.formatDateFromString(pattern: String): Date? {
+        val dateFormat = SimpleDateFormat(pattern)
         var date: Date? = null
         try {
             date = dateFormat.parse(this)
@@ -23,9 +23,15 @@ object Utils {
         return date
     }
 
-    fun Date.formatDateIntoString(): String {
-        val dateFormat = SimpleDateFormat("EEEE,dd MMM yyyy", Locale.getDefault())
+    fun Date.formatDateIntoString(pattern: String): String {
+        val dateFormat = SimpleDateFormat(pattern, Locale.getDefault())
         return dateFormat.format(this)
+    }
+
+    fun Pair<Int,Int>.formatTimeIntoString():String{
+        var minutes = "${this.second}"
+        if (this.second / 10 == 0) minutes = "0${this.second}"
+        return "${this.first}:${minutes}"
     }
 
     fun Date.isDate(date:Date):Boolean{

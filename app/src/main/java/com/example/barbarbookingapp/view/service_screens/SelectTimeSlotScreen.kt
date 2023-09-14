@@ -24,7 +24,6 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -43,20 +42,42 @@ import com.example.barbarbookingapp.model.SharedPref
 import com.example.barbarbookingapp.model.Utils.formatDateFromString
 import com.example.barbarbookingapp.model.Utils.formatDateIntoString
 import com.example.barbarbookingapp.model.Utils.formatIntoTime
+import com.example.barbarbookingapp.model.Utils.formatTimeIntoString
 import com.example.barbarbookingapp.model.Utils.isDate
+import com.example.barbarbookingapp.model.Utils.makeToast
+import com.example.barbarbookingapp.model.dto.Appointment
+import com.example.barbarbookingapp.model.dto.AppointmentServiceCrossRef
+import com.example.barbarbookingapp.model.dto.PaymentMethod
+import com.example.barbarbookingapp.model.dto.Status
 import com.example.barbarbookingapp.view.navigation.NavRoutes
 import com.example.barbarbookingapp.view.theme.CancelRed
 import com.example.barbarbookingapp.view.theme.NextBlue
 import com.example.barbarbookingapp.view.theme.Purple80
 import com.example.barbarbookingapp.view.theme.PurpleGrey80
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
-import kotlinx.coroutines.runBlocking
 import java.util.Calendar
 import java.util.Date
 
 @Composable
 fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavController) {
     viewModel.setStartTime(Pair(9, 0))
+    val context = LocalContext.current
+    val sharedPref = SharedPref.getSecuredSharedPreferences(context)
+    val userId = sharedPref.getInt("user_id", 0)
+    val selectedDate = viewModel.selectedDate.observeAsState()
+    val selectedTime = viewModel.selectedStartTime.observeAsState()
+    val selectedServices = viewModel.selectedServices.observeAsState()
+    val scheduledAppointmentId = viewModel.appointmentId.observeAsState()
+    //navController.navigate(NavRoutes.APPOINTMENT_DETAILS
+    scheduledAppointmentId.value?.apply {
+        val crossRef =
+            selectedServices.value!!.map { AppointmentServiceCrossRef(this.toInt(), it.serviceId) }
+        viewModel.insertAppointmentServiceCrossRef(crossRef)
+        navController.navigate("${NavRoutes.APPOINTMENT_DETAILS}/$this")
+    }
+
+    viewModel.fetchHistoryAppointmentForUserFromUI(userId)
+
     ConstraintLayout(
         modifier = Modifier.fillMaxSize()
     ) {
@@ -67,13 +88,15 @@ fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavControlle
             start.linkTo(parent.start)
             end.linkTo(parent.end)
         })
-        TimeSlotGrid(viewModel = viewModel, modifier = Modifier.constrainAs(timeSlotGrid) {
-            top.linkTo(dateBar.bottom, 10.dp)
-            start.linkTo(parent.start)
-            end.linkTo(parent.end)
-            bottom.linkTo(buttonGroup.top)
-            height = Dimension.fillToConstraints
-        })
+        TimeSlotGrid(
+            viewModel = viewModel,
+            modifier = Modifier.constrainAs(timeSlotGrid) {
+                top.linkTo(dateBar.bottom, 10.dp)
+                start.linkTo(parent.start)
+                end.linkTo(parent.end)
+                bottom.linkTo(buttonGroup.top)
+                height = Dimension.fillToConstraints
+            })
         Row(
             modifier = Modifier
                 .fillMaxWidth()
@@ -93,8 +116,31 @@ fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavControlle
             Spacer(modifier = Modifier.padding(10.dp))
             Button(
                 onClick = {
-                    //save appointment into database
-                    //navController.navigate(NavRoutes.APPOINTMENT_DETAILS)
+                    val barberId = 1
+                    val appointmentDate = selectedDate.value?.formatDateIntoString("yyyy-MM-dd")
+                    val startTime = selectedTime.value?.formatTimeIntoString()
+                    val serviceCharge = selectedServices.value?.sumOf { it.price }
+                    val paymentMethod = PaymentMethod.CASH
+                    val status = Status.SCHEDULED
+                    if (appointmentDate != null && startTime != null && serviceCharge != null) {
+                        viewModel.insertAppointment(
+                            Appointment(
+                                userId = userId,
+                                barberId = barberId,
+                                appointmentDate = appointmentDate,
+                                appointmentTime = startTime,
+                                paymentMethod = paymentMethod,
+                                status = status,
+                                serviceCharge = serviceCharge
+                            )
+                        )
+
+                    } else {
+                        makeToast(
+                            context,
+                            "System is scheduling for your appointment, please wait a few seconds"
+                        )
+                    }
                 },
                 colors = ButtonDefaults.buttonColors(NextBlue)
             ) {
@@ -123,7 +169,7 @@ fun TopDateSelectBar(viewModel: BarberViewModel, modifier: Modifier) {
                 .menuAnchor()
                 .padding(10.dp)
         ) {
-            Text(text = date.formatDateIntoString())
+            Text(text = date.formatDateIntoString("EEEE,dd MMM yyyy"))
             ExposedDropdownMenuDefaults.TrailingIcon(expanded = isExpanded)
         }
 
@@ -131,7 +177,7 @@ fun TopDateSelectBar(viewModel: BarberViewModel, modifier: Modifier) {
             getFutureSevenDays().forEach {
                 DropdownMenuItem(
                     text = {
-                        Text(text = it.formatDateIntoString())
+                        Text(text = it.formatDateIntoString("EEEE,dd MMM yyyy"))
                     },
                     onClick = {
                         date = it
@@ -147,33 +193,30 @@ fun TopDateSelectBar(viewModel: BarberViewModel, modifier: Modifier) {
 @SuppressLint("MutableCollectionMutableState")
 @Composable
 fun TimeSlotGrid(viewModel: BarberViewModel, modifier: Modifier) {
-    val context = LocalContext.current
     var startTime by remember { mutableStateOf(Pair(0, 0)) }
     val curDayOccupation by remember { mutableStateOf(HashMap<Pair<Int, Int>, Int>()) }
-    var selectedDate = viewModel.selectedDate.observeAsState()
-    LaunchedEffect(key1 = true) {
-        val sharedPref = SharedPref.getSecuredSharedPreferences(context)
-        val userId = sharedPref.getInt("user_id",0)
-        viewModel.fetchHistoryAppointmentForUser(userId)
-    }
+    val selectedDate = viewModel.selectedDate.observeAsState()
     val appointments = viewModel.allAppointments.observeAsState()
 
-    appointments.value?.let { appointmentWithServices ->
-        for (appointmentWithService in appointmentWithServices) {
-            val historyDate =
-                appointmentWithService.appointment.appointmentDate.formatDateFromString()
-            historyDate?.let { date ->
-                if (date.isDate(selectedDate.value ?: Date())) {
-                    val totalDuration = appointmentWithService.services.map { it.duration }.sum()
-                    val appointmentTime =
-                        appointmentWithService.appointment.appointmentTime.formatIntoTime()
-                    curDayOccupation[appointmentTime] = totalDuration
-                } else {
-                    curDayOccupation.clear()
+    selectedDate.value?.apply {
+        curDayOccupation.clear()
+        appointments.value?.let { appointmentWithServices ->
+            for (appointmentWithService in appointmentWithServices) {
+                val historyDate =
+                    appointmentWithService.appointment.appointmentDate.formatDateFromString("yyyy-MM-dd")
+                historyDate!!.let { date ->
+                    if (date.isDate(this)) {
+                        val totalDuration = appointmentWithService.services.sumOf { it.duration }
+                        val appointmentTime =
+                            appointmentWithService.appointment.appointmentTime.formatIntoTime()
+                        curDayOccupation[appointmentTime] = totalDuration
+                    }
                 }
             }
         }
     }
+
+//    selectedDate.takeIf {  }
 
     val services = viewModel.selectedServices.observeAsState()
     val serviceDuration = services.value?.sumOf { it.duration } ?: 15
@@ -186,7 +229,7 @@ fun TimeSlotGrid(viewModel: BarberViewModel, modifier: Modifier) {
         items(getSlotsForOneDay()) { curTime ->
 
             val isOccupied = isSlotInRange(curTime, startTime, serviceDuration)
-            var isBooked = isSlotBooked(curTime, curDayOccupation)
+            val isBooked = isSlotBooked(curTime, curDayOccupation)
             Card(
                 modifier = modifier
                     .padding(5.dp)
@@ -208,9 +251,8 @@ fun TimeSlotGrid(viewModel: BarberViewModel, modifier: Modifier) {
                             else Color.White
                         )
                 ) {
-                    var minutes = "${curTime.second}"
-                    if (curTime.second / 10 == 0) minutes = "0${curTime.second}"
-                    Text(text = "${curTime.first}:${minutes}")
+                    val timeString = curTime.formatTimeIntoString()
+                    Text(text = timeString)
                 }
 
             }
