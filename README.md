@@ -38,11 +38,24 @@ To use the BarBar Booking App, you need an Android device running Android 6.0 (M
 
 ### Usage
 
-1. Register Your New Account
-2. Chose your service 
-3. Chose your favourite barber
-4. Chose time of your appointment
-5. Schedule appointment!
+Getting started with the BarBar Booking App is a breeze. Follow these simple steps to schedule an appointment with your favorite barber:
+
+1. **Register Your New Account**:
+   - If you're a new user, start by registering your account within the app. Fill in your details and create a personalized profile.
+
+2. **Choose Your Service**:
+   - Browse through the list of available services offered by our barbershops. Whether it's a haircut, styling, or grooming, we've got you covered.
+
+3. **Select Your Favorite Barber**:
+   - Explore profiles of our skilled barbers, each with their unique style and expertise. Choose the barber you trust and feel comfortable with.
+
+4. **Pick Appointment Time**:
+   - Select a date and time that suits your schedule. Our flexible booking system ensures you can find the perfect slot for your appointment.
+
+5. **Schedule Your Appointment**:
+   - Confirm your booking, and you're all set! Your appointment details will be saved in your account, and you'll receive reminders so you never miss a visit to your favorite barber.
+
+With these easy steps, you can enjoy a hassle-free barber appointment experience using the BarBar Booking App.
    
 ### Built With
 
