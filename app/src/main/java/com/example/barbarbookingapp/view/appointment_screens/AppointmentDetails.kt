@@ -1,5 +1,6 @@
 package com.example.barbarbookingapp.view.appointment_screens
 
+import android.widget.ScrollView
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +11,10 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.AlertDialog
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -19,9 +23,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.pointer.PointerEventType.Companion.Scroll
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -30,18 +38,15 @@ import androidx.compose.ui.unit.sp
 import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
+import com.example.barbarbookingapp.model.dto.Status
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SALON_INFORMATION
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
 fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navController: NavController){
 
-//    val services = listOf(
-//        Service(1, "Haircut", 30, 40.0,""),
-//        Service(2, "Massage", 60, 100.0,"")
-//    )
-
     val context = LocalContext.current
+    var showDialog by remember { mutableStateOf(false) }
     LaunchedEffect(key1 = true) {
         viewModel.selectedAppointmentId(appointmentId)
     }
@@ -56,9 +61,10 @@ fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navContro
 
     ConstraintLayout(
         modifier = Modifier
-            .fillMaxSize()
+            .verticalScroll(rememberScrollState())
+            .fillMaxWidth()
             .padding(20.dp)) {
-        val (dateTimeTitle, dateText, timeText, idText, statusText, barberTitle, barberCard, storeLink, serviceTitle, serviceList, billText ) = createRefs()
+        val (dateTimeTitle, dateText, timeText, idText, statusText, cancelButton, barberTitle, barberCard, storeLink, serviceTitle, serviceList, billText ) = createRefs()
         appointmentWithServices?.let {
             Text(
                 modifier = Modifier
@@ -81,6 +87,39 @@ fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navContro
                 color = Color.Red,
                 text = appointmentWithServices!!.appointment.status.toString()
             )
+            
+            if (appointmentWithServices!!.appointment.status == Status.SCHEDULED) {
+                TextButton(
+                    modifier = Modifier
+                        .constrainAs(cancelButton) {
+                            end.linkTo(parent.end, 10.dp)
+                            top.linkTo(idText.bottom)
+                        },
+                    onClick = { showDialog = true }
+                ) {
+                    Text(text = "Cancel Appointment")
+                }
+            }
+            
+            if (showDialog) {
+                AlertDialog(
+                    title = { Text(text = "Are you sure you want to cancel this appointment?") },
+                    onDismissRequest = { showDialog = false }, 
+                    confirmButton = { 
+                        TextButton(onClick = { 
+                            viewModel.updateAppointmentStatus(appointmentId, Status.CANCELED)
+                            showDialog = false
+                        }) {
+                            Text(text = "Yes")
+                        }
+                    },
+                    dismissButton = {
+                        TextButton(onClick = { showDialog = false }) {
+                            Text(text = "No")
+                        }
+                    }
+                )
+            }
 
             Text(
                 modifier = Modifier

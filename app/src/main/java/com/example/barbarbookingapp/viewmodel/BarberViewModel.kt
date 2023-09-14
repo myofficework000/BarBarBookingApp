@@ -11,6 +11,7 @@ import com.example.barbarbookingapp.model.dto.Appointment
 import com.example.barbarbookingapp.model.dto.AppointmentWithServices
 import com.example.barbarbookingapp.model.dto.Barber
 import com.example.barbarbookingapp.model.dto.Service
+import com.example.barbarbookingapp.model.dto.Status
 import com.example.barbarbookingapp.model.dto.User
 import com.example.barbarbookingapp.model.repository.IRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -108,6 +109,10 @@ class BarberViewModel @Inject constructor(
         }
     val selectedAppointmentDuration: LiveData<Int?> = _selectedAppointmentId.switchMap { id ->
         repository.getAppointmentDuration(id).asLiveData()
+    }
+
+    fun updateAppointmentStatus(appointmentId: Int, status: Status) = viewModelScope.launch {
+        repository.updateAppointmentStatus(appointmentId, status)
     }
 
     fun selectedUserId(userId: Int) {
