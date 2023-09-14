@@ -21,4 +21,6 @@
     <string name="barber_name">Krishna Raut</string>
     <string name="total_Cost">Total Cost: $ 140.0</string>
     <string name="services">Services</string>
+    <string name="our_amazing_barbers">Our amazing barbers</string>
+    <string name="our_services">Our services</string>
 </resources>

@@ -34,7 +34,7 @@ fun MyApp() {
         composable(route = Screen.SignUp.route) { SignUp(navController) }
         composable(route = Screen.SelectTimeSlot.route) { SelectTimeSlotScreen(viewModel, navController) }
         composable(route = Screen.SelectService.route) { SelectServiceScreen(viewModel,navController) }
-        composable(route = Screen.DashboardScreen.route) { DashboardScreen(navController) }
+        composable(route = Screen.DashboardScreen.route) { DashboardScreen(viewModel, navController) }
         composable(route = Screen.SalonInformation.route) { SalonInformation(navController)}
         composable(route = Screen.AppointmentList.route) { AppointmentList(viewModel = viewModel, navController) }
         composable(
