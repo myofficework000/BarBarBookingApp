@@ -69,6 +69,7 @@ fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavControlle
     val selectedDate = viewModel.selectedDate.observeAsState()
     val selectedTime = viewModel.selectedStartTime.observeAsState()
     val selectedServices = viewModel.selectedServices.observeAsState()
+    val selectedBarber = viewModel.selectedBarber.observeAsState()
     val scheduledAppointmentId = viewModel.appointmentId.observeAsState()
     //navController.navigate(NavRoutes.APPOINTMENT_DETAILS
     LaunchedEffect(scheduledAppointmentId.value){
@@ -122,13 +123,13 @@ fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavControlle
             Spacer(modifier = Modifier.padding(10.dp))
             Button(
                 onClick = {
-                    val barberId = 1
+                    val barberId = selectedBarber.value?.barberId
                     val appointmentDate = selectedDate.value?.formatDateIntoString("yyyy-MM-dd")
                     val startTime = selectedTime.value?.formatTimeIntoString()
                     val serviceCharge = selectedServices.value?.sumOf { it.price }
                     val paymentMethod = PaymentMethod.CASH
                     val status = Status.SCHEDULED
-                    if (appointmentDate != null && startTime != null && serviceCharge != null) {
+                    if (appointmentDate != null && startTime != null && serviceCharge != null && barberId!=null) {
                         viewModel.insertAppointment(
                             Appointment(
                                 userId = userId,

@@ -15,6 +15,8 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.AlertDialog
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
@@ -39,7 +41,9 @@ import androidx.constraintlayout.compose.ConstraintLayout
 import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
 import com.example.barbarbookingapp.model.dto.Status
+import com.example.barbarbookingapp.view.navigation.NavRoutes
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SALON_INFORMATION
+import com.example.barbarbookingapp.view.theme.NextBlue
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
@@ -64,7 +68,7 @@ fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navContro
             .verticalScroll(rememberScrollState())
             .fillMaxWidth()
             .padding(20.dp)) {
-        val (dateTimeTitle, dateText, timeText, idText, statusText, cancelButton, barberTitle, barberCard, storeLink, serviceTitle, serviceList, billText ) = createRefs()
+        val (dateTimeTitle, dateText, timeText, idText, statusText, cancelButton, barberTitle, barberCard, storeLink, serviceTitle, serviceList, billText ,buttonConfirm) = createRefs()
         appointmentWithServices?.let {
             Text(
                 modifier = Modifier
@@ -281,6 +285,16 @@ fun AppointmentDetails(viewModel: BarberViewModel, appointmentId: Int, navContro
                 fontSize = 25.sp,
                 text = "Total Cost: $ ${appointmentWithServices!!.appointment.serviceCharge.toString()}"
             )
+            Button(
+                onClick = { navController.navigate(NavRoutes.DASHBOARD) },
+                colors = ButtonDefaults.buttonColors(NextBlue),
+                modifier = Modifier.constrainAs(buttonConfirm){
+                    end.linkTo(parent.end)
+                    bottom.linkTo(parent.bottom)
+                }
+            ) {
+                Text(text = "Confirm")
+            }
         }
 
 

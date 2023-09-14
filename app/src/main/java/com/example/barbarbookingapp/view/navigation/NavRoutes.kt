@@ -6,6 +6,7 @@ object NavRoutes {
     const val SIGNUP = "SignUpScreen"
     const val SELECT_TIME_SLOT = "SelectTimeSlotScreen"
     const val SELECT_SERVICE = "SelectService"
+    const val SELECT_BARBER = "SelectBarber"
     const val DASHBOARD = "DashboardScreen"
     const val APPOINTMENT_LIST = "AppointmentList"
     const val APPOINTMENT_DETAILS = "AppointmentDetails"
