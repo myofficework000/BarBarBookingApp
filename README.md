@@ -18,6 +18,12 @@ The BarBar Booking App is a mobile application that allows users to schedule app
 
 ![image](https://github.com/myofficework000/BarBarBookingApp/assets/50369522/0acf9269-fca0-4770-8218-b28632144978)
 
+![image](https://github.com/myofficework000/BarBarBookingApp/assets/50369522/8b381597-2bf9-4487-9fc1-a432c66d5faf)
+
+![image](https://github.com/myofficework000/BarBarBookingApp/assets/50369522/6d2f9b61-c51d-4a5f-a553-3eb283cbf448)
+
+![image](https://github.com/myofficework000/BarBarBookingApp/assets/50369522/a24858e7-3dbd-4da3-92bf-17bd13a8d4c3)
+
 ## Features
 
 - **User Account Creation:** Users can create and manage their accounts within the app, providing a personalized experience.
@@ -73,6 +79,6 @@ With these easy steps, you can enjoy a hassle-free barber appointment experience
 
 ## Authors
 
-- Yuan Yao
-- Hu Shiyan
-- Amar Sapcanin
+- Yuan Yao (https://github.com/yyao0)
+- Hu Shiyan (https://github.com/hushiyan01)
+- Amar Sapcanin (https://github.com/amarsapcanin)
