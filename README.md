@@ -46,10 +46,12 @@ To use the BarBar Booking App, you need an Android device running Android 6.0 (M
    
 ### Built With
 
-- Compose Jetpack
-- Room DB
-- Corutines
-- Dagger Hilt 
+- [Compose Jetpack](https://developer.android.com/jetpack/compose)
+- [Room DB](https://developer.android.com/jetpack/androidx/releases/room)
+- [Coroutines](https://kotlinlang.org/docs/coroutines-overview.html)
+- [Dagger Hilt](https://dagger.dev/hilt/)
+- [Google Maps](https://developer.android.com/training/maps/maps-and-places)
+- [Lottie Animation](https://airbnb.design/lottie/)
 
 ## Authors
 
