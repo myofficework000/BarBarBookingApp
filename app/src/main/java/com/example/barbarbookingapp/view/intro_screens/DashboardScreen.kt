@@ -105,7 +105,7 @@ fun DashboardScreen(viewModel: BarberViewModel, navController: NavController) {
                             .align(CenterHorizontally)
                             .clickable {
                                 navController.navigate(
-                                    NavRoutes.SELECT_SERVICE
+                                    NavRoutes.SELECT_BARBER
                                 )
                             })
                     Text(text = "Services", Modifier.align(CenterHorizontally))
@@ -157,7 +157,7 @@ fun DashboardScreen(viewModel: BarberViewModel, navController: NavController) {
 
             LazyRow(Modifier.padding(top = 10.dp)) {
                 items(allBarbers.value ?: emptyList()) {
-                    BarbersItemCard(barberItem = it, context)
+                    BarbersItemCard(barberItem = it, context,navController,viewModel)
                 }
             }
 
@@ -190,11 +190,15 @@ fun DashboardScreen(viewModel: BarberViewModel, navController: NavController) {
 }
 
 @Composable
-fun BarbersItemCard(barberItem : Barber, context: Context) {
+fun BarbersItemCard(barberItem : Barber, context: Context, navController: NavController, viewModel: BarberViewModel) {
     Card (
         Modifier
             .padding(3.dp)
             .border(1.dp, Color.Gray, shape = RoundedCornerShape(5.dp))
+            .clickable{
+                viewModel.selectedBarberId(barberItem.barberId)
+                navController.navigate(NavRoutes.SELECT_SERVICE)
+            }
     ) {
         Column(Modifier.padding(10.dp)) {
             val resourceId = context.resources.getIdentifier(barberItem!!.image, "drawable", context.packageName)

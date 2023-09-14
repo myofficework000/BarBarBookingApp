@@ -14,6 +14,7 @@ import com.example.barbarbookingapp.view.intro_screens.DashboardScreen
 import com.example.barbarbookingapp.view.intro_screens.Login
 import com.example.barbarbookingapp.view.intro_screens.SignUp
 import com.example.barbarbookingapp.view.intro_screens.SplashScreen
+import com.example.barbarbookingapp.view.service_screens.SelectBarberScreen
 import com.example.barbarbookingapp.view.service_screens.SelectServiceScreen
 import com.example.barbarbookingapp.view.service_screens.SelectTimeSlotScreen
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
@@ -27,7 +28,7 @@ fun MyApp() {
     val userViewModel:UserViewModel = hiltViewModel()
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route
+        startDestination = Screen.DashboardScreen.route
     ) {
         composable(route = Screen.Splash.route) { SplashScreen(navController) }
         composable(route = Screen.Login.route) { Login(navController, userViewModel) }
@@ -36,6 +37,7 @@ fun MyApp() {
         composable(route = Screen.SelectService.route) { SelectServiceScreen(viewModel,navController) }
         composable(route = Screen.DashboardScreen.route) { DashboardScreen(viewModel, navController) }
         composable(route = Screen.SalonInformation.route) { SalonInformation(navController)}
+        composable(route = Screen.SelectBarber.route) { SelectBarberScreen(viewModel, navController) }
         composable(route = Screen.AppointmentList.route) { AppointmentList(viewModel = viewModel, navController) }
         composable(
             route = "${NavRoutes.APPOINTMENT_DETAILS}/{appointmentId}",

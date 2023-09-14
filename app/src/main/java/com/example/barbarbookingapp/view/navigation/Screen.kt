@@ -5,6 +5,7 @@ import com.example.barbarbookingapp.view.navigation.NavRoutes.APPOINTMENT_LIST
 import com.example.barbarbookingapp.view.navigation.NavRoutes.DASHBOARD
 import com.example.barbarbookingapp.view.navigation.NavRoutes.LOGIN
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SALON_INFORMATION
+import com.example.barbarbookingapp.view.navigation.NavRoutes.SELECT_BARBER
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SELECT_SERVICE
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SELECT_TIME_SLOT
 import com.example.barbarbookingapp.view.navigation.NavRoutes.SIGNUP
@@ -16,6 +17,7 @@ sealed class Screen(val route: String) {
     object SignUp : Screen(SIGNUP)
     object SelectTimeSlot : Screen(SELECT_TIME_SLOT)
     object SelectService : Screen(SELECT_SERVICE)
+    object SelectBarber : Screen(SELECT_BARBER)
     object DashboardScreen : Screen(DASHBOARD)
     object SalonInformation : Screen(SALON_INFORMATION)
     object AppointmentList: Screen(APPOINTMENT_LIST)
