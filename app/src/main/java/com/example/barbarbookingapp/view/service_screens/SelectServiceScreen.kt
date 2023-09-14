@@ -1,5 +1,6 @@
 package com.example.barbarbookingapp.view.service_screens
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
@@ -45,7 +46,7 @@ import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
 fun SelectServiceScreen(viewModel: BarberViewModel, navController: NavController) {
-
+    val context = LocalContext.current
     val serviceTitle by remember { mutableStateOf("Haircuts") }
     val allServices = viewModel.allServices.observeAsState()
     val selectedServices = mutableListOf<Service>()
@@ -74,7 +75,7 @@ fun SelectServiceScreen(viewModel: BarberViewModel, navController: NavController
                 }
         ) {
             items(allServices.value ?: emptyList()) {
-                ServiceItemCard(serviceItem = it, selectedServices)
+                ServiceItemCard(serviceItem = it, selectedServices,context)
                 Spacer(modifier = Modifier.padding(10.dp))
             }
         }
@@ -87,7 +88,7 @@ fun SelectServiceScreen(viewModel: BarberViewModel, navController: NavController
             Row {
                 Button(
                     onClick = {
-
+                        navController.popBackStack()
                     },
                     colors = ButtonDefaults.buttonColors(Color.Red),
 
@@ -111,7 +112,7 @@ fun SelectServiceScreen(viewModel: BarberViewModel, navController: NavController
 }
 
 @Composable
-fun ServiceItemCard(serviceItem: Service, selectedServices: MutableList<Service>) {
+fun ServiceItemCard(serviceItem: Service, selectedServices: MutableList<Service>, context:Context) {
     val selectedOption = remember { mutableStateOf("unselected") }
     var showDialog by remember { mutableStateOf(false) }
     Card(
@@ -129,6 +130,8 @@ fun ServiceItemCard(serviceItem: Service, selectedServices: MutableList<Service>
                 }
         ) {
             val (itemImage, itemTitle, itemSelector, itemDetailBox) = createRefs()
+            val resourceId = context.resources.getIdentifier(serviceItem.image, "drawable", context.packageName)
+
             if(showDialog){
                 ServiceDetailDialog(service = serviceItem, object :OnDialogClose{
                     override fun closeDialog(close: Boolean) {
@@ -137,7 +140,7 @@ fun ServiceItemCard(serviceItem: Service, selectedServices: MutableList<Service>
                 })
             }
             Image(
-                painter = painterResource(id = R.drawable.ic_launcher_foreground),
+                painter = painterResource(id = resourceId),
                 contentDescription = serviceItem.name,
                 modifier = Modifier
                     .height(100.dp)

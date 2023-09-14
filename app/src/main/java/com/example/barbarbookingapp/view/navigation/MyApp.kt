@@ -27,7 +27,7 @@ fun MyApp() {
     val userViewModel:UserViewModel = hiltViewModel()
     NavHost(
         navController = navController,
-        startDestination = Screen.Splash.route
+        startDestination = Screen.SelectService.route
     ) {
         composable(route = Screen.Splash.route) { SplashScreen(navController) }
         composable(route = Screen.Login.route) { Login(navController, userViewModel) }
