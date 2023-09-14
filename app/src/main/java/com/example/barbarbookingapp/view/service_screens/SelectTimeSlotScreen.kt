@@ -1,6 +1,7 @@
 package com.example.barbarbookingapp.view.service_screens
 
 import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -24,6 +25,7 @@ import androidx.compose.material3.ExposedDropdownMenuBox
 import androidx.compose.material3.ExposedDropdownMenuDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
@@ -57,7 +59,7 @@ import com.example.barbarbookingapp.view.theme.PurpleGrey80
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 import java.util.Calendar
 import java.util.Date
-
+var i = 0
 @Composable
 fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavController) {
     viewModel.setStartTime(Pair(9, 0))
@@ -69,12 +71,16 @@ fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavControlle
     val selectedServices = viewModel.selectedServices.observeAsState()
     val scheduledAppointmentId = viewModel.appointmentId.observeAsState()
     //navController.navigate(NavRoutes.APPOINTMENT_DETAILS
-    scheduledAppointmentId.value?.apply {
-        val crossRef =
-            selectedServices.value!!.map { AppointmentServiceCrossRef(this.toInt(), it.serviceId) }
-        viewModel.insertAppointmentServiceCrossRef(crossRef)
-        navController.navigate("${NavRoutes.APPOINTMENT_DETAILS}/$this")
+    LaunchedEffect(scheduledAppointmentId.value){
+        scheduledAppointmentId.value?.apply {
+            val crossRef =
+                selectedServices.value!!.map { AppointmentServiceCrossRef(this.toInt(), it.serviceId) }
+            viewModel.insertAppointmentServiceCrossRef(crossRef)
+            Log.i("check","${i++}")
+            navController.navigate("${NavRoutes.APPOINTMENT_DETAILS}/$this")
+        }
     }
+
 
     viewModel.fetchHistoryAppointmentForUserFromUI(userId)
 
