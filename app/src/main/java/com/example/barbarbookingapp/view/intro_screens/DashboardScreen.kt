@@ -1,5 +1,6 @@
 package com.example.barbarbookingapp.view.intro_screens
 
+import android.content.Context
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
@@ -20,6 +21,7 @@ import androidx.compose.ui.Alignment.Companion.CenterHorizontally
 import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -36,6 +38,7 @@ import com.example.barbarbookingapp.viewmodel.BarberViewModel
 fun DashboardScreen(viewModel: BarberViewModel, navController: NavController) {
     ConstraintLayout(Modifier.fillMaxSize()) {
 
+        val context = LocalContext.current
         val allServices = viewModel.allServices.observeAsState()
         val allBarbers = viewModel.barbers.observeAsState()
 
@@ -150,7 +153,7 @@ fun DashboardScreen(viewModel: BarberViewModel, navController: NavController) {
 
             LazyRow(Modifier.padding(top = 10.dp)) {
                 items(allBarbers.value ?: emptyList()) {
-                    BarbersItemCard(barberItem = it)
+                    BarbersItemCard(barberItem = it, context)
                 }
             }
 
@@ -183,14 +186,15 @@ fun DashboardScreen(viewModel: BarberViewModel, navController: NavController) {
 }
 
 @Composable
-fun BarbersItemCard(barberItem : Barber) {
+fun BarbersItemCard(barberItem : Barber, context: Context) {
     Card (
         Modifier
             .padding(3.dp)
             .border(1.dp, Color.Gray, shape = RoundedCornerShape(5.dp))
     ) {
         Column(Modifier.padding(10.dp)) {
-            Image(painter = painterResource(R.drawable.ic_launcher_foreground),
+            val resourceId = context.resources.getIdentifier(barberItem!!.image, "drawable", context.packageName)
+            Image(painter = painterResource(id = resourceId),
                 contentDescription = barberItem.firstName,
                 modifier = Modifier.align(CenterHorizontally)
             )
