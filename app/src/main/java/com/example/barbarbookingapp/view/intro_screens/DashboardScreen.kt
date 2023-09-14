@@ -177,7 +177,7 @@ fun DashboardScreen(viewModel: BarberViewModel, navController: NavController) {
 
             LazyRow(Modifier.padding(top = 10.dp)) {
                 items(allServices.value ?: emptyList()) {
-                    ServiceItemCard(serviceItem = it)
+                    ServiceItemCard(serviceItem = it, context)
                 }
             }
 
@@ -208,14 +208,15 @@ fun BarbersItemCard(barberItem : Barber, context: Context) {
 }
 
 @Composable
-fun ServiceItemCard(serviceItem : Service) {
+fun ServiceItemCard(serviceItem : Service, context: Context) {
     Card (
         Modifier
             .padding(3.dp)
             .border(1.dp, Color.Gray, shape = RoundedCornerShape(5.dp))
     ) {
         Column(Modifier.padding(10.dp))  {
-            Image(painter = painterResource(R.drawable.ic_launcher_foreground),
+            val resourceId = context.resources.getIdentifier(serviceItem!!.image, "drawable", context.packageName)
+            Image(painter = painterResource(resourceId),
                 contentDescription = serviceItem.name,
                 modifier = Modifier.align(CenterHorizontally)
             )
