@@ -77,6 +77,12 @@ With these easy steps, you can enjoy a hassle-free barber appointment experience
 
 - [Lottie Animation](https://airbnb.design/lottie/): Lottie is a library for Android that allows you to render After Effects animations in real-time. It's great for adding interactive animations to your app.
 
+## Architecture
+
+This app uses MVVM architecture.
+
+![image](https://github.com/myofficework000/BarBarBookingApp/assets/50369522/91e0aea2-3b59-419e-98f6-7a1fb0f0adc9)
+
 ## Authors
 
 - Yuan Yao (https://github.com/yyao0)
