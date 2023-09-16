@@ -115,7 +115,7 @@ fun SelectTimeSlotScreen(viewModel: BarberViewModel, navController: NavControlle
             horizontalArrangement = Arrangement.Center
         ) {
             Button(
-                onClick = { },
+                onClick = { navController.popBackStack() },
                 colors = ButtonDefaults.buttonColors(CancelRed)
             ) {
                 Text(text = "Cancel")

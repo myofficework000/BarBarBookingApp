@@ -9,12 +9,12 @@ plugins {
 
 android {
     namespace = "com.example.barbarbookingapp"
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.barbarbookingapp"
         minSdk = 24
-        targetSdk = 33
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
@@ -115,4 +115,7 @@ dependencies {
 
     //Secured shared preferences
     implementation("androidx.security:security-crypto:1.0.0")
+
+    //for extended compose tools
+    implementation ("androidx.compose.material:material-icons-extended:1.5.1")
 }
