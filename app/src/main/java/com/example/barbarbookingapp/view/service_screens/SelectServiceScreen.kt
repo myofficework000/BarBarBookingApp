@@ -30,6 +30,8 @@ import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
+import androidx.compose.ui.Alignment.Companion.CenterVertically
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
@@ -42,6 +44,7 @@ import androidx.navigation.NavController
 import com.example.barbarbookingapp.R
 import com.example.barbarbookingapp.model.dto.Service
 import com.example.barbarbookingapp.view.navigation.NavRoutes
+import com.example.barbarbookingapp.view.theme.Purple40
 import com.example.barbarbookingapp.viewmodel.BarberViewModel
 
 @Composable
@@ -182,24 +185,28 @@ fun ServiceItemCard(serviceItem: Service, selectedServices: MutableList<Service>
                         start.linkTo(itemImage.end)
                     })
             Row(
-                modifier = Modifier.constrainAs(itemDetailBox) {
+                modifier = Modifier.padding(12.dp)
+                    .constrainAs(itemDetailBox) {
                     top.linkTo(itemTitle.bottom)
                     bottom.linkTo(parent.bottom)
                     start.linkTo(itemImage.end)
                     end.linkTo(itemSelector.start)
-                }
+                },
+                verticalAlignment = CenterVertically
             ) {
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_av_timer_24),
                     contentDescription = "clock",
-                    Modifier.size(30.dp)
+                    Modifier.size(30.dp),
+                    tint = Purple40
                 )
                 Text(text = "${serviceItem.duration} minutes")
-                Spacer(modifier = Modifier.padding(20.dp))
+                Spacer(modifier = Modifier.padding(10.dp))
                 Icon(
                     painter = painterResource(id = R.drawable.baseline_attach_money_24),
                     contentDescription = "clock",
-                    Modifier.size(30.dp)
+                    Modifier.size(30.dp),
+                    tint = Purple40
                 )
                 Text(text = "${serviceItem.price}")
             }
